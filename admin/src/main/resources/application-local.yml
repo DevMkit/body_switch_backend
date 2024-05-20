@@ -1,0 +1,13 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: Body Switch Admin
+  main:
+    web-application-type: servlet
+
+app:
+  version: 0.0.1

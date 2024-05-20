@@ -1,0 +1,13 @@
+server:
+  port: 8082
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: Body Switch Mobile
+  main:
+    web-application-type: servlet
+
+app:
+  version: 0.0.1

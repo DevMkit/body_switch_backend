@@ -1,0 +1,5 @@
+rootProject.name = 'body-switch'
+include 'common'
+include 'admin'
+include 'mobile'
+
