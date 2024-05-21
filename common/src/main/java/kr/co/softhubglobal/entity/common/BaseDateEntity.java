@@ -1,5 +1,6 @@
 package kr.co.softhubglobal.entity.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -18,10 +19,12 @@ import java.time.LocalDateTime;
 public abstract class BaseDateEntity {
 
     @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "REG_DT", updatable = false)
     private LocalDateTime registeredDate;
 
     @LastModifiedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "UPD_DT")
     private LocalDateTime updatedDate;
 }
