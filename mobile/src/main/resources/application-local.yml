@@ -6,8 +6,26 @@ server:
 spring:
   application:
     name: Body Switch Mobile
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: MyP@ssw0rd!
+    username: root
+    url: jdbc:mysql://112.175.61.15:3306/body_switch
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
   main:
     web-application-type: servlet
 
 app:
   version: 0.0.1
+  jwt:
+    secret: 77397A244326462948404D635166546A576E5A7234753778214125442A472D4B
+    expiration:
+      minutes: 10080
+  openapi:
+    server-url: http://localhost:8082
