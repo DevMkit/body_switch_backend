@@ -4,11 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
 import kr.co.softhubglobal.entity.user.User;
-import kr.co.softhubglobal.repository.UserRepository;
 import kr.co.softhubglobal.security.TokenProvider;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,19 +20,13 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
-    private final MessageSource messageSource;
     private final ObjectValidator<AuthenticationDTO.AuthenticationRequest> authenticationRequestObjectValidator;
 
     public AuthenticationDTO.AuthenticationResponse login(AuthenticationDTO.AuthenticationRequest authenticationRequest) {
 
         authenticationRequestObjectValidator.validate(authenticationRequest);
-
-//        User user = userRepository.findById(authenticationRequest.getUsername())
-//                .orElseThrow(() -> new ResourceNotFoundException(
-//                        messageSource.getMessage("member.email.not.exist", new Object[]{authenticationRequest.getUsername()}, Locale.ENGLISH)));
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

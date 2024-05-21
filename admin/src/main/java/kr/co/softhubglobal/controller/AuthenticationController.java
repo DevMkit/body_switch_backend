@@ -33,7 +33,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final MessageSource messageSource;
 
-    @Operation(summary = "Login(email, password)")
+    @Operation(summary = "Login(username, password)")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

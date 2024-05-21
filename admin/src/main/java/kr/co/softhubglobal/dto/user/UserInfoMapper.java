@@ -1,13 +1,11 @@
 package kr.co.softhubglobal.dto.user;
 
 import kr.co.softhubglobal.entity.user.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
 @Service
-@RequiredArgsConstructor
 public class UserInfoMapper implements Function<User, UserDTO.UserInfo> {
 
     @Override
