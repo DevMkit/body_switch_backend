@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import kr.co.softhubglobal.entity.user.User;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 
@@ -63,4 +64,7 @@ public class Member extends BaseDateEntity {
 
     @Column(name = "UPD_ID")
     private String updatedId;
+
+    @Formula("(SELECT FLOOR(DATEDIFF(CURRENT_DATE(), m.BIRTH_DATE) / 362.25) FROM member m WHERE m.ID = ID)")
+    private Integer age;
 }
