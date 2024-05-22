@@ -65,7 +65,7 @@ public class MemberService {
                         .postalCode(memberCreateRequest.getPostalCode())
                         .address(memberCreateRequest.getAddress())
                         .addressDetail(memberCreateRequest.getAddressDetail())
-                        .status(MemberStatus.NORMAL)
+                        .status(MemberStatus.ACTIVE)
                         .loginProvider(LoginProvider.LOCAL)
                         .isSMSReceive(false)
                         .regType(MemberRegisteredType.SELF)
