@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
 import kr.co.softhubglobal.dto.ResponseDTO;
-import kr.co.softhubglobal.dto.user.UserDTO;
+import kr.co.softhubglobal.dto.store.StoreDTO;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.AuthenticationService;
-import kr.co.softhubglobal.service.UserService;
+import kr.co.softhubglobal.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import java.util.Locale;
 @Tag(name = "Authentication", description = "Login APIs")
 public class AuthenticationController {
 
-    private final UserService userService;
+    private final StoreService storeService;
     private final AuthenticationService authenticationService;
     private final MessageSource messageSource;
 
@@ -59,7 +59,7 @@ public class AuthenticationController {
         );
     }
 
-    @Operation(summary = "Create a new user record")
+    @Operation(summary = "Create a store representative record")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -73,10 +73,10 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(
-            @RequestBody UserDTO.UserCreateRequest userCreateRequest
+    public ResponseEntity<?> createStoreRepresentativeRecord(
+            @RequestBody StoreDTO.StoreRepresentativeCreateRequest storeRepresentativeCreateRequest
     ) {
-        userService.createUserRecord(userCreateRequest);
+        storeService.createStoreRepresentativeRecord(storeRepresentativeCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
