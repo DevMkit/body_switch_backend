@@ -14,7 +14,8 @@ public class MemberInfoMapper implements Function<Member, MemberDTO.MemberInfo> 
         return new MemberDTO.MemberInfo(
                 member.getUser().getUsername(),
                 member.getUser().getName(),
-                member.getGender().toString()
+                member.getGender().toString(),
+                member.getAge()
         );
     }
 }
