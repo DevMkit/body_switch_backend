@@ -2,8 +2,8 @@ package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.user.UserDTO;
 import kr.co.softhubglobal.dto.user.UserInfoMapper;
+import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
-import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.repository.UserRepository;
 import kr.co.softhubglobal.validator.ObjectValidator;
@@ -47,7 +47,7 @@ public class UserService {
                         .phoneNumber(userCreateRequest.getPhoneNumber())
                         .email(userCreateRequest.getEmail())
                         .password(passwordEncoder.encode(userCreateRequest.getPassword()))
-                        .userType(UserType.OPERATOR)
+                        .role(Role.OPERATOR)
                         .build()
         );
     }

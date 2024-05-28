@@ -15,7 +15,7 @@ public class UserInfoMapper implements Function<User, UserDTO.UserInfo> {
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getEmail(),
-                user.getUserType().toString()
+                user.getRole().toString()
         );
     }
 }

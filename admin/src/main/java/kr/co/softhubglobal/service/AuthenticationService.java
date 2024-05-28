@@ -3,11 +3,11 @@ package kr.co.softhubglobal.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
-import kr.co.softhubglobal.entity.store.StoreRepresentative;
+import kr.co.softhubglobal.entity.center.CenterManager;
+import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
-import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
-import kr.co.softhubglobal.repository.StoreRepresentativeRepository;
+import kr.co.softhubglobal.repository.CenterManagerRepository;
 import kr.co.softhubglobal.security.TokenProvider;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final StoreRepresentativeRepository storeRepresentativeRepository;
+    private final CenterManagerRepository centerManagerRepository;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final ObjectValidator<AuthenticationDTO.AuthenticationRequest> authenticationRequestObjectValidator;
@@ -42,14 +42,14 @@ public class AuthenticationService {
         );
         User user = (User) authentication.getPrincipal();
 
-        if(user.getUserType().equals(UserType.MEMBER)) {
-            throw new BadCredentialsException("Bad credentials");
-        }
+//        if(user.getRole().equals(Role.MEMBER)) {
+//            throw new BadCredentialsException("Bad credentials");
+//        }
 
-        if(user.getUserType().equals(UserType.STORE_REPRESENTATIVE)){
-            StoreRepresentative storeRepresentative = storeRepresentativeRepository.findByUserUsername(user.getUsername())
+        if(user.getRole().equals(Role.MANAGER)){
+            CenterManager centerManager = centerManagerRepository.findByUserUsername(user.getUsername())
                     .orElseThrow(() -> new BadCredentialsException("Bad credentials"));
-            switch (storeRepresentative.getStore().getStatus()) {
+            switch (centerManager.getCenter().getStatus()) {
                 case REFUSED -> throw new RequestNotAcceptableException("This account has already refused");
                 case WITHDREW -> throw new RequestNotAcceptableException("This account has already withdrawn");
                 case APPROVAL_PENDING -> throw new RequestNotAcceptableException("This account is waiting approve");
