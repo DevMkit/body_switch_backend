@@ -3,6 +3,7 @@ package kr.co.softhubglobal.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
+import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.security.TokenProvider;
@@ -38,7 +39,7 @@ public class AuthenticationService {
         );
         User user = (User) authentication.getPrincipal();
 
-        if(user.getUserType().equals(UserType.EMPLOYEE) || user.getUserType().equals(UserType.STORE_REPRESENTATIVE)) {
+        if(!user.getRole().equals(Role.MEMBER)) {
             throw new BadCredentialsException("Bad credentials");
         }
 

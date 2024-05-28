@@ -6,6 +6,7 @@ import kr.co.softhubglobal.entity.member.LoginProvider;
 import kr.co.softhubglobal.entity.member.Member;
 import kr.co.softhubglobal.entity.member.MemberRegisteredType;
 import kr.co.softhubglobal.entity.member.MemberStatus;
+import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
@@ -43,7 +44,7 @@ public class MemberService {
 
         memberCreateRequestObjectValidator.validate(memberCreateRequest);
 
-        if(userRepository.existsById(memberCreateRequest.getUsername())) {
+        if(userRepository.existsByUsernameAndRoleIn(memberCreateRequest.getUsername(), List.of(Role.MEMBER, Role.EMPLOYEE))) {
             throw new DuplicateResourceException(
                     messageSource.getMessage("member.username.already.exists", new Object[]{memberCreateRequest.getUsername()}, Locale.ENGLISH));
         }
@@ -57,7 +58,7 @@ public class MemberService {
                                 .phoneNumber(memberCreateRequest.getPhoneNumber())
                                 .email(memberCreateRequest.getEmail())
                                 .password(passwordEncoder.encode(memberCreateRequest.getPassword()))
-                                .userType(UserType.MEMBER)
+                                .role(Role.MEMBER)
                                 .build()
                         )
                         .birthDate(memberCreateRequest.getBirthDate())

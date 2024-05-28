@@ -1,5 +1,6 @@
 package kr.co.softhubglobal.security;
 
+import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -19,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String subject) {
-        return userRepository.findById(subject)
+        return userRepository.findByUsername(subject)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         messageSource.getMessage("user.account.not.found", null, Locale.ENGLISH))
                 );
