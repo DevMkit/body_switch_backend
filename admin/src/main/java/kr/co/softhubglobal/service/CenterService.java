@@ -32,14 +32,14 @@ public class CenterService {
     private final PasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
 
-    public List<CenterDTO.CenterManagerInfo> getAllCenterManagerRecord(){
+    public List<CenterDTO.CenterManagerInfo> getAllCenterManagers(){
         return centerManagerRepository.findAll()
                 .stream()
                 .map(centerManagerInfoMapper)
                 .toList();
     }
 
-    public void createCenterManagerRecord(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest) {
+    public void createCenterManager(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest) {
 
         centerManagerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getManagerInfo());
         centerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getCenterInfo());

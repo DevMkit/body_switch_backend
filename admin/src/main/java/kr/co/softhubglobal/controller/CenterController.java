@@ -38,7 +38,7 @@ public class CenterController {
     @GetMapping
     public ResponseEntity<?> getAllCenterManagers() {
         return new ResponseEntity<>(
-                centerService.getAllCenterManagerRecord(),
+                centerService.getAllCenterManagers(),
                 HttpStatus.OK
         );
     }

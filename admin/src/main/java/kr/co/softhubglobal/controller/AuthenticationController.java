@@ -73,10 +73,10 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<?> createCenterManagerRecord(
+    public ResponseEntity<?> createCenterManager(
             @RequestBody CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest
     ) {
-        centerService.createCenterManagerRecord(centerManagerCreateRequest);
+        centerService.createCenterManager(centerManagerCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED

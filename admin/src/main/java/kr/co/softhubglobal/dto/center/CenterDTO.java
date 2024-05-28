@@ -52,18 +52,18 @@ public class CenterDTO {
 
         @NotNull(message = "center.business.name.not.null")
         @NotEmpty(message = "center.business.name.not.empty")
-        public String businessName;
+        private String businessName;
 
         @NotNull(message = "center.business.number.not.null")
         @NotEmpty(message = "center.business.number.not.empty")
-        public String businessNumber;
+        private String businessNumber;
 
         @NotNull(message = "center.business.classification.not.null")
-        public BusinessClassification businessClassification;
+        private BusinessClassification businessClassification;
 
         @NotNull(message = "center.business.type.not.null")
         @NotEmpty(message = "center.business.type.not.empty")
-        public String businessType;
+        private String businessType;
 
         @NotNull(message = "center.postal.code.not.null")
         @NotEmpty(message = "center.postal.code.not.empty")
@@ -91,10 +91,10 @@ public class CenterDTO {
     @AllArgsConstructor
     public static class CenterManagerInfo {
 
-        public String businessName;
-        public String username;
-        public String name;
-        public String phoneNumber;
+        private String businessName;
+        private String username;
+        private String name;
+        private String phoneNumber;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime registeredDate;
         private CenterStatus status;
