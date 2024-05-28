@@ -1,17 +1,17 @@
-package kr.co.softhubglobal.entity.store;
+package kr.co.softhubglobal.entity.center;
 
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import lombok.*;
 
 @Entity
-@Table(name = "store")
+@Table(name = "center")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Store extends BaseDateEntity {
+public class Center extends BaseDateEntity {
 
     @Id
     @Column(name = "ID")
@@ -54,5 +54,5 @@ public class Store extends BaseDateEntity {
 
     @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
-    private StoreStatus status;
+    private CenterStatus status;
 }

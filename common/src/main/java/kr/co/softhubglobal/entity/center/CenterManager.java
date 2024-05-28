@@ -1,18 +1,19 @@
-package kr.co.softhubglobal.entity.store;
+package kr.co.softhubglobal.entity.center;
 
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
+import kr.co.softhubglobal.entity.member.MemberRegisteredType;
 import kr.co.softhubglobal.entity.user.User;
 import lombok.*;
 
 @Entity
-@Table(name = "store_representative")
+@Table(name = "center_manager")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class StoreRepresentative extends BaseDateEntity {
+public class CenterManager extends BaseDateEntity {
 
     @Id
     @Column(name = "ID")
@@ -20,10 +21,17 @@ public class StoreRepresentative extends BaseDateEntity {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USERNAME")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "STORE_ID")
-    private Store store;
+    @JoinColumn(name = "CENTER_ID")
+    private Center center;
+
+    @Column(name = "BRANCH_ID")
+    private Long branchId;
+
+    @Column(name = "MANAGER_TYPE")
+    @Enumerated(EnumType.STRING)
+    private ManagerType managerType;
 }

@@ -19,6 +19,10 @@ import java.util.List;
 public class User extends BaseDateEntity implements UserDetails {
 
     @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "USERNAME")
     private String username;
 
@@ -34,13 +38,17 @@ public class User extends BaseDateEntity implements UserDetails {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "USER_TYPE")
+//    @Column(name = "USER_TYPE")
+//    @Enumerated(EnumType.STRING)
+//    private UserType userType;
+
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    @Column(name = "ROLE")
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return role.getAuthorities();
     }
 
     @Override

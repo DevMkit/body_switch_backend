@@ -22,7 +22,7 @@ public class Member extends BaseDateEntity {
     private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USERNAME")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "PROFILE_IMAGE")
