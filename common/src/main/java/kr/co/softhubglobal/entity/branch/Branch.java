@@ -22,7 +22,7 @@ public class Branch extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CENTER_ID")
     public Center center;
 
@@ -51,13 +51,14 @@ public class Branch extends BaseEntity {
     private String branchDetailDescription;
 
     @Column(name = "TYPE")
+    @Enumerated(EnumType.STRING)
     private BranchType branchType;
 
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BranchFacility> branchFacilities;
 
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BranchWorkHours> branchWorkHoursList;
 }
