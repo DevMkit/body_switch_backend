@@ -1,14 +1,12 @@
 package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.branch.BranchDTO;
-import kr.co.softhubglobal.entity.branch.Branch;
-import kr.co.softhubglobal.entity.branch.BranchFacility;
-import kr.co.softhubglobal.entity.branch.BranchType;
-import kr.co.softhubglobal.entity.branch.BranchWorkHours;
+import kr.co.softhubglobal.entity.branch.*;
 import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.entity.center.CenterManager;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
+import kr.co.softhubglobal.repository.BranchExerciseRoomRepository;
 import kr.co.softhubglobal.repository.BranchRepository;
 import kr.co.softhubglobal.repository.CenterManagerRepository;
 import kr.co.softhubglobal.repository.CenterRepository;
@@ -28,9 +26,10 @@ public class BranchService {
     private final CenterRepository centerRepository;
     private final CenterManagerRepository centerManagerRepository;
     private final BranchRepository branchRepository;
+    private final BranchExerciseRoomRepository branchExerciseRoomRepository;
     private final MessageSource messageSource;
     private final ObjectValidator<BranchDTO.MainBranchCreateRequest> branchCreateRequestObjectValidator;
-
+    private final ObjectValidator<BranchDTO.BranchExerciseRoomCreateRequest> branchExerciseRoomCreateRequestObjectValidator;
     public List<Branch> getAllBranches(){
         return branchRepository.findAll();
     }
@@ -95,5 +94,21 @@ public class BranchService {
         centerManager.setBranch(branch);
 
         branchRepository.save(branch);
+    }
+
+    public void createBranchExerciseRoom(Long branchId, BranchDTO.BranchExerciseRoomCreateRequest branchExerciseRoomCreateRequest) {
+
+        branchExerciseRoomCreateRequestObjectValidator.validate(branchExerciseRoomCreateRequest);
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("branch.id.not.exist", new Object[]{branchId}, Locale.ENGLISH)));
+
+        branchExerciseRoomRepository.save(
+                BranchExerciseRoom.builder()
+                        .branch(branch)
+                        .name(branchExerciseRoomCreateRequest.getRoomName())
+                        .build()
+        );
     }
 }

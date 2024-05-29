@@ -34,6 +34,14 @@ public class BranchDTO {
     }
 
     @Data
+    public static class BranchExerciseRoomCreateRequest {
+
+        @NotNull(message = "branch.room.name.not.null")
+        @NotEmpty(message = "branch.room.name.not.empty")
+        private String roomName;
+    }
+
+    @Data
     public static class WorkHoursInfo {
 
         private boolean isOpen;

@@ -71,4 +71,29 @@ public class BranchController {
                 HttpStatus.CREATED
         );
     }
+
+    @Operation(summary = "Create a branch exercise room")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "CREATED",
+                    content = {@Content(schema = @Schema(implementation = ResponseDTO.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            )
+    })
+    @PostMapping("/{branchId}/rooms")
+    public ResponseEntity<?> createBranchExerciseRoom(
+            @PathVariable("branchId") Long branchId,
+            @RequestBody BranchDTO.BranchExerciseRoomCreateRequest branchExerciseRoomCreateRequest
+    ) {
+        branchService.createBranchExerciseRoom(branchId, branchExerciseRoomCreateRequest);
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
+                HttpStatus.CREATED
+        );
+    }
 }
