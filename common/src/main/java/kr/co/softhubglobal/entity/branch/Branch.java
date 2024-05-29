@@ -61,4 +61,8 @@ public class Branch extends BaseEntity {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BranchWorkHours> branchWorkHoursList;
+
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<BranchExerciseRoom> branchExerciseRooms;
 }
