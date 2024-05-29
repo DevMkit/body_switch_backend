@@ -1,6 +1,5 @@
 package kr.co.softhubglobal.security;
 
-import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Locale;
 
 @Service

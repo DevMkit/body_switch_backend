@@ -7,16 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.member.MemberDTO;
-import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Locale;
 
 import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
 
