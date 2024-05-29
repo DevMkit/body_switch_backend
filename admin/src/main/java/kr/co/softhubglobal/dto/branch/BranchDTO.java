@@ -12,7 +12,10 @@ import java.util.List;
 public class BranchDTO {
 
     @Data
-    public static class BranchCreateRequest {
+    public static class MainBranchCreateRequest {
+
+        @NotNull(message = "branch.center.id.not.null")
+        private Long centerId;
 
         @NotNull(message = "branch.name.not.null")
         @NotEmpty(message = "branch.name.not.empty")

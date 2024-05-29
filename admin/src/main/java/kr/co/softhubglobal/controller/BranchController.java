@@ -62,10 +62,10 @@ public class BranchController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> createBranch(
-            @RequestBody BranchDTO.BranchCreateRequest branchCreateRequest
+    public ResponseEntity<?> createMainBranch(
+            @RequestBody BranchDTO.MainBranchCreateRequest mainBranchCreateRequest
     ) {
-        branchService.createBranch(branchCreateRequest);
+        branchService.createMainBranch(mainBranchCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
