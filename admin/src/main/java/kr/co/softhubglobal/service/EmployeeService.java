@@ -4,7 +4,7 @@ import kr.co.softhubglobal.dto.employee.EmployeeDTO;
 import kr.co.softhubglobal.dto.employee.EmployeeInfoMapper;
 import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.employee.Employee;
-import kr.co.softhubglobal.entity.employee.EmployeeResponsibilities;
+import kr.co.softhubglobal.entity.employee.EmployeeResponsibility;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
@@ -69,7 +69,7 @@ public class EmployeeService {
         employee.setIntroduction(employee.getIntroduction());
         employee.setResponsibilities(employeeCreateRequest.getResponsibilities()
                 .stream()
-                .map(responsibility -> EmployeeResponsibilities.builder()
+                .map(responsibility -> EmployeeResponsibility.builder()
                         .employee(employee)
                         .name(responsibility.toString())
                         .build()

@@ -1,7 +1,7 @@
 package kr.co.softhubglobal.dto.employee;
 
 import kr.co.softhubglobal.entity.employee.Employee;
-import kr.co.softhubglobal.entity.employee.EmployeeResponsibilities;
+import kr.co.softhubglobal.entity.employee.EmployeeResponsibility;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
@@ -15,7 +15,7 @@ public class EmployeeInfoMapper implements Function<Employee, EmployeeDTO.Employ
                 employee.getUser().getName(),
                 employee.getGender().toString(),
                 employee.getUser().getPhoneNumber(),
-                employee.getResponsibilities().stream().map(EmployeeResponsibilities::getName).toList(),
+                employee.getResponsibilities().stream().map(EmployeeResponsibility::getName).toList(),
                 employee.getHiredDate(),
                 employee.getEmployeeClassification().toString()
         );
