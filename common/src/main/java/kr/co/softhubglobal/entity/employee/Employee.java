@@ -1,19 +1,15 @@
 package kr.co.softhubglobal.entity.employee;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.branch.Branch;
-import kr.co.softhubglobal.entity.branch.BranchFacility;
 import kr.co.softhubglobal.entity.common.BaseEntity;
 import kr.co.softhubglobal.entity.member.Gender;
-import kr.co.softhubglobal.entity.member.MemberStatus;
 import kr.co.softhubglobal.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -66,5 +62,5 @@ public class Employee extends BaseEntity {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<EmployeeResponsibilities> responsibilities;
+    private List<EmployeeResponsibility> responsibilities;
 }

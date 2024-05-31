@@ -1,4 +1,4 @@
-package kr.co.softhubglobal.entity.employee;
+package kr.co.softhubglobal.entity.course;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -6,13 +6,13 @@ import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import lombok.*;
 
 @Entity
-@Table(name = "employee_responsibilities")
+@Table(name = "course_ticket_image")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class EmployeeResponsibilities extends BaseDateEntity {
+public class CourseTicketImage extends BaseDateEntity {
 
     @Id
     @Column(name = "ID")
@@ -20,10 +20,10 @@ public class EmployeeResponsibilities extends BaseDateEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "EMPLOYEE_ID")
+    @JoinColumn(name = "COURSE_TICKET_ID")
     @JsonBackReference
-    public Employee employee;
+    public CourseTicket courseTicket;
 
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "IMAGE_URL")
+    public String imageUrl;
 }

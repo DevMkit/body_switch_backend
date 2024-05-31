@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.entity.common.BaseEntity;
+import kr.co.softhubglobal.entity.course.CourseTicket;
 import lombok.*;
 
 import java.util.List;
@@ -65,4 +66,8 @@ public class Branch extends BaseEntity {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BranchExerciseRoom> branchExerciseRooms;
+
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<CourseTicket> courseTickets;
 }
