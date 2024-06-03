@@ -8,8 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.ResponseDTO;
-import kr.co.softhubglobal.dto.course.CourseTicketDTO;
+import kr.co.softhubglobal.dto.course.CourseClassDTO;
 import kr.co.softhubglobal.exception.ApiError;
+import kr.co.softhubglobal.service.CourseClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEM
 @RequiredArgsConstructor
 public class CourseClassController {
 
+    private final CourseClassService courseClassService;
     private final MessageSource messageSource;
 
     @Operation(summary = "Create a course class record")
@@ -57,8 +59,9 @@ public class CourseClassController {
     })
     @PostMapping
     public ResponseEntity<?> createCourseClass(
-            @RequestBody CourseTicketDTO.CourseTicketCreateRequest courseTicketCreateRequest
+            @RequestBody CourseClassDTO.CourseClassCreateRequest courseClassCreateRequest
     ) {
+        courseClassService.createCourseClass(courseClassCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
