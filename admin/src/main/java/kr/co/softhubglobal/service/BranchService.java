@@ -30,6 +30,7 @@ public class BranchService {
     private final MessageSource messageSource;
     private final ObjectValidator<BranchDTO.MainBranchCreateRequest> branchCreateRequestObjectValidator;
     private final ObjectValidator<BranchDTO.BranchExerciseRoomCreateRequest> branchExerciseRoomCreateRequestObjectValidator;
+
     public List<Branch> getAllBranches(){
         return branchRepository.findAll();
     }
