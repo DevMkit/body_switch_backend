@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -20,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String subject) {
-        return userRepository.findByUsername(subject)
+        return userRepository.findByUsernameAndRoleNotIn(subject, List.of(Role.MANAGER, Role.SUPERADMIN, Role.OPERATOR))
                 .orElseThrow(() -> new UsernameNotFoundException(
                         messageSource.getMessage("user.account.not.found", null, Locale.ENGLISH))
                 );

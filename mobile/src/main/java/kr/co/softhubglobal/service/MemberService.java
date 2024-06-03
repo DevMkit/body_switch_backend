@@ -8,7 +8,6 @@ import kr.co.softhubglobal.entity.member.MemberRegisteredType;
 import kr.co.softhubglobal.entity.member.MemberStatus;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
-import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.repository.MemberRepository;
 import kr.co.softhubglobal.repository.UserRepository;
