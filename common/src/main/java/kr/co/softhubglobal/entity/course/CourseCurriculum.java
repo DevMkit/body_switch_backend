@@ -32,4 +32,5 @@ public class CourseCurriculum extends BaseDateEntity {
 
     @Column(name = "IMAGE_URL")
     public String imageUrl;
+
 }

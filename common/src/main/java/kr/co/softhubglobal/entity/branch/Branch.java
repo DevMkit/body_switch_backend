@@ -25,13 +25,13 @@ public class Branch extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CENTER_ID")
-    public Center center;
+    private Center center;
 
     @Column(name = "BRANCH_NAME")
-    public String branchName;
+    private String branchName;
 
     @Column(name = "BRANCH_DESCRIPTION")
-    public String branchDescription;
+    private String branchDescription;
 
     @Column(name = "POSTAL_CODE")
     private String postalCode;
