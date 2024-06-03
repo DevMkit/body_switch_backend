@@ -26,7 +26,7 @@ public class BranchWorkHours extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "BRANCH_ID")
     @JsonBackReference
-    public Branch branch;
+    private Branch branch;
 
     @Column(name = "DAY_OF_WEEK")
     @Enumerated(EnumType.STRING)

@@ -22,7 +22,7 @@ public class EmployeeResponsibility extends BaseDateEntity {
     @ManyToOne
     @JoinColumn(name = "EMPLOYEE_ID")
     @JsonBackReference
-    public Employee employee;
+    private Employee employee;
 
     @Column(name = "NAME")
     private String name;

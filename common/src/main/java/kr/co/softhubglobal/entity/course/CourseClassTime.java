@@ -32,8 +32,8 @@ public class CourseClassTime extends BaseDateEntity {
     private DayOfWeek dayOfWeek;
 
     @Column(name = "START_TIME")
-    private LocalTime closeTime;
+    private LocalTime startTime;
 
     @Column(name = "END_TIME")
-    private LocalTime openTime;
+    private LocalTime endTime;
 }

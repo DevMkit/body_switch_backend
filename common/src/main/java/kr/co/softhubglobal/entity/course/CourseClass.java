@@ -1,11 +1,9 @@
 package kr.co.softhubglobal.entity.course;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.branch.BranchExerciseRoom;
-import kr.co.softhubglobal.entity.branch.BranchWorkHours;
 import kr.co.softhubglobal.entity.common.BaseEntity;
 import kr.co.softhubglobal.entity.employee.Employee;
 import lombok.*;
@@ -35,6 +33,9 @@ public class CourseClass extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CourseClassType classType;
 
+    @Column(name = "CLASS_NAME")
+    private String className;
+
     @ManyToOne
     @JoinColumn(name = "BRANCH_EXERCISE_ROOM_ID")
     public BranchExerciseRoom exerciseRoom;
@@ -60,7 +61,7 @@ public class CourseClass extends BaseEntity {
     private Integer membersMaxCount;
 
     @Column(name = "MEMO")
-    public String memo;
+    private String memo;
 
     @OneToMany(mappedBy = "courseClass", cascade = CascadeType.ALL)
     @JsonManagedReference

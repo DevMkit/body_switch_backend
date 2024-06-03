@@ -22,7 +22,7 @@ public class BranchExerciseRoom extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "BRANCH_ID")
     @JsonBackReference
-    public Branch branch;
+    private Branch branch;
 
     @Column(name = "NAME")
     private String name;

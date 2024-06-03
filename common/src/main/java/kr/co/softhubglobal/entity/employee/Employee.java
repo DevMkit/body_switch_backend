@@ -42,7 +42,7 @@ public class Employee extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "BRANCH_ID")
-    public Branch branch;
+    private Branch branch;
 
     @Column(name = "INTRODUCTION")
     private String introduction;

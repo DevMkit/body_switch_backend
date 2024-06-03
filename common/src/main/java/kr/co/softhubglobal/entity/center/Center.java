@@ -19,17 +19,17 @@ public class Center extends BaseDateEntity {
     private Long id;
 
     @Column(name = "BUSINESS_NAME")
-    public String businessName;
+    private String businessName;
 
     @Column(name = "BUSINESS_NUMBER")
-    public String businessNumber;
+    private String businessNumber;
 
     @Column(name = "BUSINESS_CLASSIFICATION")
     @Enumerated(EnumType.STRING)
-    public BusinessClassification businessClassification;
+    private BusinessClassification businessClassification;
 
     @Column(name = "BUSINESS_TYPE")
-    public String businessType;
+    private String businessType;
 
     @Column(name = "POSTAL_CODE")
     private String postalCode;
