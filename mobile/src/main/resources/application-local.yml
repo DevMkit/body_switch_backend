@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: MyP@ssw0rd!
     username: root
-    url: jdbc:mysql://112.175.61.15:3306/body_switch
+    url: jdbc:mysql://112.175.61.15:3306/body_switch?characterEncoding=UTF-8
   jpa:
     hibernate:
       ddl-auto: none

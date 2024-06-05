@@ -1,15 +1,56 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Nicepay spring-boot</title>
-    <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nicepay</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+<!--    <meta httpEquiv="x-ua-compatible" content="ie=edge" charset=UTF-8" />-->
+<!--    <meta httpEquiv="x-ua-compatible" content="ie=edge" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1" />-->
+    <style>
+        .spinner-container {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        .spinner {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 4px solid #ccc;
+          border-top-color: #333;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-
 <body>
-<h1>{{resultMsg}}</h1>
-<p>상세한 응답 body는 log를 확인해주세요</p>
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    <script>
+        window.onload = (event) => {
+            // Call the closeWebView function exposed by the Android interface
+            // The argument passed here (e.g., id) will be logged by the Kotlin code
+            if(typeof Android !=='undefined') {
+                if (typeof Android.closeWebView !== 'undefined') {
+                    // document.querySelector(".close-button").textContent = typeof Android.closeWebView
+                    Android.closeWebView(
+                        '{{resultCode}}',
+                        '{{resultMsg}}',
+                        '{{paymentStatus}}'
+                    );
+                } else {
+                    // document.querySelector(".close-button").textContent = "Android.closeWebView not defined"
+                }
+            } else {
+                // document.querySelector(".close-button").textContent = "Android not defined"
+            }
+        }
+    </script>
 </body>
-
 </html>

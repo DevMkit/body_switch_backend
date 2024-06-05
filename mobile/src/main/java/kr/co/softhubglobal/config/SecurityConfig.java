@@ -46,7 +46,8 @@ public class SecurityConfig {
             "/webjars/**",
             "/swagger-ui.html",
             "/user/api/v1/auth/**",
-            "/user/api/v1/payments/**"
+            "/user/api/v1/payments/serverAuth",
+            "/user/api/v1/payments/hook"
     };
 
     @Bean

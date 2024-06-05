@@ -1,118 +1,60 @@
 package kr.co.softhubglobal.controller.user;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import kr.co.softhubglobal.dto.ResponseDTO;
+import kr.co.softhubglobal.dto.nicepay.NicepayDTO;
+import kr.co.softhubglobal.entity.member.MemberOrder;
+import kr.co.softhubglobal.entity.user.User;
+import kr.co.softhubglobal.service.NicepayService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+
+import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
 
 @Controller
 @RequestMapping("/user/api/v1/payments")
 @Tag(name = "Nicepay payment", description = "NicePay payment APIs")
+@RequiredArgsConstructor
 public class NicepayController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final NicepayService nicepayService;
 
-    private final String CLIENT_ID = "S2_e407bae059224e7d8600d639a35dc627";
-    private final String SECRET_KEY = "e853b223ae7641e48895b3e6bafa3429";
-
-    @RequestMapping("/")
-    public String indexDemo(Model model){
-        UUID id = UUID.randomUUID();
-        model.addAttribute("orderId", id);
-        model.addAttribute("clientId", CLIENT_ID);
+    @PostMapping
+    @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)
+    public String checkout(
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model,
+            @RequestBody NicepayDTO.PaymentCreateRequest paymentCreateRequest
+    ) {
+        nicepayService.createPayment(((User) userDetails).getId(), model, paymentCreateRequest);
         return "/index";
     }
 
-    @RequestMapping(value="/cancel")
-    public String cancelDemo(){
-        return "/cancel";
-    }
-
-    @RequestMapping("/serverAuth")
+    @PostMapping("/serverAuth")
     public String requestPayment(
-            @RequestParam String tid,
-            @RequestParam Long amount,
+            HttpServletRequest httpServletRequest,
             Model model
     ) throws Exception {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + SECRET_KEY).getBytes()));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        Map<String, Object> AuthenticationMap = new HashMap<>();
-        AuthenticationMap.put("amount", String.valueOf(amount));
-
-        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(AuthenticationMap), headers);
-
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
-                "https://sandbox-api.nicepay.co.kr/v1/payments/" + tid,
-                request,
-                JsonNode.class
-        );
-
-        JsonNode responseNode = responseEntity.getBody();
-        String resultCode = responseNode.get("resultCode").asText();
-        model.addAttribute("resultMsg", responseNode.get("resultMsg").asText());
-
-        System.out.println(responseNode.toPrettyString());
-
-        if (resultCode.equalsIgnoreCase("0000")) {
-            System.out.println("Payment Success");
-            // 결제 성공 비즈니스 로직 구현
-        } else {
-            System.out.println("Payment Failed");
-            // 결제 실패 비즈니스 로직 구현
-        }
+        MemberOrder memberOrder = nicepayService.approvePayment(httpServletRequest);
+        model.addAttribute("resultCode", memberOrder.getResultCode());
+        model.addAttribute("resultMsg", memberOrder.getResultMsg());
+        model.addAttribute("paymentStatus", memberOrder.getId());
         return "/response";
-    }
-
-    @RequestMapping("/cancelAuth")
-    public String requestCancel(
-            @RequestParam String tid,
-            @RequestParam String amount,
-            Model model
-    ) throws Exception {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + SECRET_KEY).getBytes()));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        Map<String, Object> AuthenticationMap = new HashMap<>();
-        AuthenticationMap.put("amount", amount);
-        AuthenticationMap.put("reason", "test");
-        AuthenticationMap.put("orderId", UUID.randomUUID().toString());
-
-        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(AuthenticationMap), headers);
-
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
-                "https://sandbox-api.nicepay.co.kr/v1/payments/"+ tid +"/cancel", request, JsonNode.class);
-
-        JsonNode responseNode = responseEntity.getBody();
-        String resultCode = responseNode.get("resultCode").asText();
-        model.addAttribute("resultMsg", responseNode.get("resultMsg").asText());
-
-        System.out.println(responseNode.toPrettyString());
-
-        if (resultCode.equalsIgnoreCase("0000")) {
-            System.out.println("Cancel Success");
-            // 취소 성공 비즈니스 로직 구현
-        } else {
-            System.out.println("Cancel Failed");
-            // 취소 실패 비즈니스 로직 구현
-        }
-        return "/response";
+//        return new ResponseEntity<>(
+//                new ResponseDTO(memberOrder.getResultCode()),
+//                HttpStatus.OK
+//        );
     }
 
     @RequestMapping("/hook")
