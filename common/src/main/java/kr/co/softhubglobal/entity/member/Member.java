@@ -1,12 +1,15 @@
 package kr.co.softhubglobal.entity.member;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
+import kr.co.softhubglobal.entity.course.CourseTicketImage;
 import kr.co.softhubglobal.entity.user.User;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -67,4 +70,8 @@ public class Member extends BaseDateEntity {
 
     @Formula("(SELECT FLOOR(DATEDIFF(CURRENT_DATE(), m.BIRTH_DATE) / 362.25) FROM member m WHERE m.ID = ID)")
     private Integer age;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<MemberOrder> orderList;
 }
