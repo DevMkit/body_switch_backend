@@ -11,6 +11,7 @@ import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.repository.MemberRepository;
 import kr.co.softhubglobal.repository.UserRepository;
+import kr.co.softhubglobal.utils.FileUploader;
 import kr.co.softhubglobal.utils.RandomCodeGenerator;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,7 @@ public class MemberService {
                         )
                         .birthDate(memberCreateRequest.getBirthDate())
                         .gender(memberCreateRequest.getGender())
+                        .profileImage(memberCreateRequest.getProfileImage() != null ? FileUploader.uploadFile(memberCreateRequest.getProfileImage()) : null)
                         .postalCode(memberCreateRequest.getPostalCode())
                         .address(memberCreateRequest.getAddress())
                         .addressDetail(memberCreateRequest.getAddressDetail())

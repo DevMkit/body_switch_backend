@@ -1,12 +1,15 @@
 package kr.co.softhubglobal.dto.member;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.entity.member.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -43,6 +46,7 @@ public class MemberDTO {
         @Email(message = "member.email.invalid.pattern")
         private String email;
 
+        private MultipartFile profileImage;
         private String postalCode;
         private String address;
         private String addressDetail;
