@@ -50,5 +50,5 @@ public class MemberOrder extends BaseDateEntity {
     private String resultMsg;
 
     @Column(name = "PAID_AT")
-    private LocalDateTime paidAT;
+    private LocalDateTime paidAt;
 }

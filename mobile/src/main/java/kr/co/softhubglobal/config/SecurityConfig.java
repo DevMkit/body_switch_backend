@@ -47,6 +47,7 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/user/api/v1/auth/**",
             "/user/api/v1/payments/serverAuth",
+            "/user/api/v1/payments/clientAuth",
             "/user/api/v1/payments/hook"
     };
 

@@ -13,6 +13,7 @@ import kr.co.softhubglobal.repository.CourseTicketRepository;
 import kr.co.softhubglobal.repository.MemberOrderRepository;
 import kr.co.softhubglobal.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,14 +23,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NicepayService {
 
-    private final String CLIENT_ID = "S2_8dbbac5df51540bd8596baa0918079db";
-    private final String SECRET_KEY = "68769c63a816401ebcf73e2c6c20daa4";
+//    private final String CLIENT_ID = "S2_8dbbac5df51540bd8596baa0918079db";
+//    private final String SECRET_KEY = "68769c63a816401ebcf73e2c6c20daa4";
+
+    private final String CLIENT_ID = "S1_8682f689034843d591cbd2b87ed09889";
+    private final String SECRET_KEY = "11922da0c877446d8f243f9caad19bba";
 
     private final MemberOrderRepository memberOrderRepository;
     private final MemberRepository memberRepository;
@@ -71,7 +77,8 @@ public class NicepayService {
         model.addAttribute("orderId", orderId);
         model.addAttribute("amount", Math.round(courseTicket.getFinalPrice()));
         model.addAttribute("goodsName", courseTicket.getTicketName());
-        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
+//        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
+        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
     }
 
     public MemberOrder approvePayment(
@@ -130,7 +137,66 @@ public class NicepayService {
             memberOrder.setResultCode(authResultCode);
             memberOrder.setResultMsg(authResultMsg);
         }
-        memberOrderRepository.save(memberOrder);
-        return memberOrder;
+        return memberOrderRepository.save(memberOrder);
+    }
+
+    public MemberOrder approvePaymentClientAuth(
+            HttpServletRequest httpServletRequest
+    ) {
+        String resultCode = httpServletRequest.getParameter("resultCode");
+        String resultMsg = httpServletRequest.getParameter("resultMsg");
+        String tid = httpServletRequest.getParameter("tid");
+        String orderId = httpServletRequest.getParameter("orderId");
+        String paidAt = httpServletRequest.getParameter("paidAt");
+        String status = httpServletRequest.getParameter("status");
+
+        MemberOrder memberOrder = memberOrderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("course.ticket.order.id.not.exist", new Object[]{orderId}, Locale.ENGLISH))
+                );
+
+        memberOrder.setTid(tid);
+        memberOrder.setResultCode(resultCode);
+        memberOrder.setResultMsg(resultMsg);
+        if(status != null) {
+            memberOrder.setPaymentStatus(status);
+        } else if(resultCode.equalsIgnoreCase("I002")) {
+            memberOrder.setPaymentStatus("CANCELED");
+        }
+        if(paidAt != null) {
+            memberOrder.setPaidAt(LocalDateTime.parse(paidAt));
+        }
+        return memberOrderRepository.save(memberOrder);
+    }
+
+    public void creditCardCallback(
+            HashMap<String, Object> hookMap
+    ) {
+        String resultCode = hookMap.get("resultCode").toString();
+        String resultMsg = hookMap.get("resultMsg").toString();
+        String tid =  hookMap.get("tid").toString();
+        String orderId = hookMap.get("orderId").toString();
+        String paidAt = hookMap.get("paidAt").toString();
+        String status = hookMap.get("status").toString();
+
+        log.info("CALLBACK ORDER ID : {}", orderId);
+
+        Optional<MemberOrder> optionalMemberOrder = memberOrderRepository.findByOrderId(orderId);
+        if(optionalMemberOrder.isPresent()) {
+            log.info("ORDER ID FOUND");
+            MemberOrder memberOrder = optionalMemberOrder.get();
+            memberOrder.setTid(tid);
+            memberOrder.setResultCode(resultCode);
+            memberOrder.setResultMsg(resultMsg);
+            if(status != null) {
+                memberOrder.setPaymentStatus(status);
+            }
+            if(paidAt != null) {
+                memberOrder.setPaidAt(LocalDateTime.parse(paidAt));
+            }
+            memberOrderRepository.save(memberOrder);
+        } else {
+            log.info("UNKNOWN ORDER ID : {}", orderId);
+        }
     }
 }
