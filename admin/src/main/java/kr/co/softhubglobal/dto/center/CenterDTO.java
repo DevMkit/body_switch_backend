@@ -1,14 +1,18 @@
 package kr.co.softhubglobal.dto.center;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import kr.co.softhubglobal.dto.PageableDTO;
 import kr.co.softhubglobal.entity.center.BusinessClassification;
 import kr.co.softhubglobal.entity.center.CenterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CenterDTO {
@@ -18,6 +22,16 @@ public class CenterDTO {
 
         private CenterManagerCreateInfo managerInfo;
         private CenterCreateInfo centerInfo;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class CenterManagerSearchRequest extends PageableDTO.Request {
+
+        private String name;
+        private LocalDate registeredDateFrom;
+        private LocalDate registeredDateTo;
+        private CenterStatus status;
     }
 
     @Data
@@ -91,12 +105,48 @@ public class CenterDTO {
     @AllArgsConstructor
     public static class CenterManagerInfo {
 
+        private Long id;
         private String businessName;
         private String username;
         private String name;
         private String phoneNumber;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime registeredDate;
+        private CenterStatus status;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CenterManagerDetailInfo {
+
+        private ManagerInfo manageInfo;
+        private BusinessInfo businessInfo;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class ManagerInfo {
+
+        private Long id;
+        private String name;
+        private String phoneNumber;
+        private String username;
+        private String email;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BusinessInfo {
+
+        private String businessName;
+        private String businessNumber;
+        private String representativeNumber;
+        private String email;
+        private BusinessClassification businessClassification;
+        private String homepage;
+        private String businessType;
+        private String address;
+        private String addressDetail;
         private CenterStatus status;
     }
 }

@@ -11,7 +11,7 @@ import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.center.CenterDTO;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.AuthenticationService;
-import kr.co.softhubglobal.service.CenterService;
+import kr.co.softhubglobal.service.CenterManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import java.util.Locale;
 @Tag(name = "Authentication", description = "Login APIs")
 public class AuthenticationController {
 
-    private final CenterService centerService;
+    private final CenterManagerService centerManagerService;
     private final AuthenticationService authenticationService;
     private final MessageSource messageSource;
 
@@ -76,7 +76,7 @@ public class AuthenticationController {
     public ResponseEntity<?> createCenterManager(
             @RequestBody CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest
     ) {
-        centerService.createCenterManager(centerManagerCreateRequest);
+        centerManagerService.createCenterManager(centerManagerCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED

@@ -11,6 +11,7 @@ public class CenterManagerInfoMapper implements Function<CenterManager, CenterDT
     @Override
     public CenterDTO.CenterManagerInfo apply(CenterManager centerManager) {
         return new CenterDTO.CenterManagerInfo(
+                centerManager.getId(),
                 centerManager.getCenter().getBusinessName(),
                 centerManager.getUser().getUsername(),
                 centerManager.getUser().getName(),
