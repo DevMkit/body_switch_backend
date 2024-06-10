@@ -37,7 +37,7 @@ public class BranchController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Branch.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BranchDTO.BranchInfo.class)) }
             )
     })
     @GetMapping

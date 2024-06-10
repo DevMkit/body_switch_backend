@@ -1,6 +1,7 @@
 package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.branch.BranchDTO;
+import kr.co.softhubglobal.dto.branch.BranchInfoMapper;
 import kr.co.softhubglobal.entity.branch.*;
 import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.entity.center.CenterManager;
@@ -27,12 +28,16 @@ public class BranchService {
     private final CenterManagerRepository centerManagerRepository;
     private final BranchRepository branchRepository;
     private final BranchExerciseRoomRepository branchExerciseRoomRepository;
+    private final BranchInfoMapper branchInfoMapper;
     private final MessageSource messageSource;
     private final ObjectValidator<BranchDTO.MainBranchCreateRequest> branchCreateRequestObjectValidator;
     private final ObjectValidator<BranchDTO.BranchExerciseRoomCreateRequest> branchExerciseRoomCreateRequestObjectValidator;
 
-    public List<Branch> getAllBranches(){
-        return branchRepository.findAll();
+    public List<BranchDTO.BranchInfo> getAllBranches(){
+        return branchRepository.findAll()
+                .stream()
+                .map(branchInfoMapper)
+                .toList();
     }
 
     @Transactional

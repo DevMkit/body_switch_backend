@@ -3,6 +3,7 @@ package kr.co.softhubglobal.dto.branch;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.DayOfWeek;
@@ -56,5 +57,15 @@ public class BranchDTO {
     public static class FacilityInfo {
 
         private String name;
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    public static class BranchInfo {
+
+        private Long branchId;
+        private String branchName;
+        private String centerName;
     }
 }

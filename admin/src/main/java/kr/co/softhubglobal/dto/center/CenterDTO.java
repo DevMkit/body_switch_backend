@@ -28,6 +28,7 @@ public class CenterDTO {
     @EqualsAndHashCode(callSuper = false)
     public static class CenterManagerSearchRequest extends PageableDTO.Request {
 
+        private Long branchId;
         private String name;
         private LocalDate registeredDateFrom;
         private LocalDate registeredDateTo;

@@ -38,6 +38,9 @@ public class CenterManagerService {
 
     public List<CenterDTO.CenterManagerInfo> getAllCenterManagers(CenterDTO.CenterManagerSearchRequest searchRequest){
         Restrictions restrictions = new Restrictions();
+        if(searchRequest.getBranchId() != null) {
+            restrictions.eq("branch.id", searchRequest.getBranchId());
+        }
         if(searchRequest.getName() != null) {
             restrictions.like("user.name", "%" + searchRequest.getName() + "%");
         }
