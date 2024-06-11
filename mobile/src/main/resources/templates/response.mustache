@@ -29,6 +29,7 @@
     </style>
 </head>
 <body>
+    <h1>TEST</h1>
     <div class="spinner-container">
         <div class="spinner"></div>
     </div>
@@ -49,6 +50,16 @@
                 }
             } else {
                 // document.querySelector(".close-button").textContent = "Android not defined"
+            }
+
+            if (typeof window.webkit !== 'undefined' && typeof window.webkit.messageHandlers !== 'undefined' && typeof window.webkit.messageHandlers.closeWebView !== 'undefined') {
+                window.webkit.messageHandlers.closeWebView.postMessage({
+                    resultCode: '{{resultCode}}',
+                    resultMsg: '{{resultMsg}}',
+                    paymentStatus: '{{paymentStatus}}'
+                });
+            } else {
+                console.log("webkit.messageHandlers.closeWebView not defined");
             }
         }
     </script>

@@ -34,8 +34,8 @@ public class NicepayService {
 //    private final String CLIENT_ID = "S2_8dbbac5df51540bd8596baa0918079db";
 //    private final String SECRET_KEY = "68769c63a816401ebcf73e2c6c20daa4";
 
-    private final String CLIENT_ID = "S1_8682f689034843d591cbd2b87ed09889";
-    private final String SECRET_KEY = "11922da0c877446d8f243f9caad19bba";
+    private final String CLIENT_ID = "S2_60f499cba3254923bb4e59134aab10b5";
+    private final String SECRET_KEY = "50e14c509632411785747f9fd6ff174a";
 
     private final MemberOrderRepository memberOrderRepository;
     private final MemberRepository memberRepository;
@@ -78,66 +78,106 @@ public class NicepayService {
         model.addAttribute("amount", Math.round(courseTicket.getFinalPrice()));
         model.addAttribute("goodsName", courseTicket.getTicketName());
 //        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
-        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
+        model.addAttribute("returnUrl", "http://192.168.0.142:8082/user/api/v1/payments/serverAuth");
+//        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
+    }
+
+    public void createHostedPayment(
+            Long userId,
+            NicepayDTO.PaymentCreateRequest paymentCreateRequest
+    ) {
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("user.account.not.found", new Object[]{paymentCreateRequest.getTicketId()}, Locale.ENGLISH))
+                );
+
+        CourseTicket courseTicket = courseTicketRepository.findById(paymentCreateRequest.getTicketId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("course.ticket.id.not.exist", new Object[]{paymentCreateRequest.getTicketId()}, Locale.ENGLISH))
+                );
+
+        UUID orderId = UUID.randomUUID();
+
+        memberOrderRepository.save(
+                MemberOrder.builder()
+                        .member(member)
+                        .courseTicket(courseTicket)
+                        .orderId(orderId.toString())
+                        .paymentMethod("CARD")
+                        .paymentStatus("ORDER_CREATED")
+                        .build()
+        );
     }
 
     public MemberOrder approvePayment(
             HttpServletRequest httpServletRequest
-    ) throws JsonProcessingException {
-
-        String authResultCode = httpServletRequest.getParameter("authResultCode");
-        String authResultMsg = httpServletRequest.getParameter("authResultMsg");
-        String tid = httpServletRequest.getParameter("tid");
-        String clientId = httpServletRequest.getParameter("clientId");
-        String orderId = httpServletRequest.getParameter("orderId");
-        String amount = httpServletRequest.getParameter("amount");
-        String authToken = httpServletRequest.getParameter("authToken");
-        String signature = httpServletRequest.getParameter("signature");
-
-        MemberOrder memberOrder = memberOrderRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        messageSource.getMessage("course.ticket.order.id.not.exist", new Object[]{orderId}, Locale.ENGLISH))
-                );
-        memberOrder.setTid(tid);
-
-        if(authResultCode.equalsIgnoreCase("0000")) {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + SECRET_KEY).getBytes()));
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            Map<String, Object> AuthenticationMap = new HashMap<>();
-            AuthenticationMap.put("amount", amount);
-
-            HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(AuthenticationMap), headers);
-
-            ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
-                    "https://sandbox-api.nicepay.co.kr/v1/payments/" + "tid",
-                    request,
-                    JsonNode.class
-            );
-
-            JsonNode responseNode = responseEntity.getBody();
-            String resultCode = responseNode.get("resultCode").asText();
-
-            System.out.println(responseNode.toPrettyString());
-
-            if (resultCode.equalsIgnoreCase("0000")) {
-                System.out.println("Payment Success");
-            } else {
-                System.out.println("Payment Failed");
+    ) {
+        try {
+            Enumeration<String> params = httpServletRequest.getParameterNames();
+            while(params.hasMoreElements()){
+                String paramName = params.nextElement();
+                System.out.println(" HERE " + paramName + " : "+ httpServletRequest.getParameter(paramName));
             }
 
-            memberOrder.setPaymentStatus(String.valueOf(responseNode.get("status").asText()).toUpperCase());
-            memberOrder.setResultCode(resultCode);
-            memberOrder.setResultMsg(responseNode.get("resultMsg").asText());
+            String authResultCode = httpServletRequest.getParameter("authResultCode");
+            String authResultMsg = httpServletRequest.getParameter("authResultMsg");
+            String tid = httpServletRequest.getParameter("tid");
+            String clientId = httpServletRequest.getParameter("clientId");
+            String orderId = httpServletRequest.getParameter("orderId");
+            String amount = httpServletRequest.getParameter("amount");
+            String authToken = httpServletRequest.getParameter("authToken");
+            String signature = httpServletRequest.getParameter("signature");
 
-        } else {
-            memberOrder.setPaymentStatus("CANCELED");
-            memberOrder.setResultCode(authResultCode);
-            memberOrder.setResultMsg(authResultMsg);
+            MemberOrder memberOrder = memberOrderRepository.findByOrderId(orderId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            messageSource.getMessage("course.ticket.order.id.not.exist", new Object[]{orderId}, Locale.ENGLISH))
+                    );
+            memberOrder.setTid(tid);
+
+            if(authResultCode.equalsIgnoreCase("0000")) {
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((CLIENT_ID + ":" + SECRET_KEY).getBytes()));
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                Map<String, Object> AuthenticationMap = new HashMap<>();
+                AuthenticationMap.put("amount", amount);
+
+                HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(AuthenticationMap), headers);
+
+                ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
+                        "https://sandbox-api.nicepay.co.kr/v1/payments/" + tid,
+                        request,
+                        JsonNode.class
+                );
+
+                JsonNode responseNode = responseEntity.getBody();
+                String resultCode = responseNode.get("resultCode").asText();
+
+                System.out.println(responseNode.toPrettyString());
+
+                if (resultCode.equalsIgnoreCase("0000")) {
+                    System.out.println("Payment Success");
+                } else {
+                    System.out.println("Payment Failed");
+                }
+
+                memberOrder.setPaymentStatus(String.valueOf(responseNode.get("status").asText()).toUpperCase());
+                memberOrder.setResultCode(resultCode);
+                memberOrder.setResultMsg(responseNode.get("resultMsg").asText());
+
+            } else {
+                memberOrder.setPaymentStatus("CANCELED");
+                memberOrder.setResultCode(authResultCode);
+                memberOrder.setResultMsg(authResultMsg);
+            }
+            return memberOrderRepository.save(memberOrder);
+
+        } catch (Exception e) {
+            log.error("SERVER AUTH ERROR: {}" , e.getMessage());
+            return null;
         }
-        return memberOrderRepository.save(memberOrder);
     }
 
     public MemberOrder approvePaymentClientAuth(

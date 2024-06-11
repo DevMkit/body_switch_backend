@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
@@ -45,8 +44,14 @@ public class NicepayController {
     public String serverAuth(
             HttpServletRequest httpServletRequest,
             Model model
-    ) throws Exception {
+    ) {
         MemberOrder memberOrder = nicepayService.approvePayment(httpServletRequest);
+        if(memberOrder == null) {
+            model.addAttribute("resultCode", "ERROR");
+            model.addAttribute("resultMsg", "ERROR");
+            model.addAttribute("paymentStatus", 0);
+            return "response";
+        }
         model.addAttribute("resultCode", memberOrder.getResultCode());
         model.addAttribute("resultMsg", memberOrder.getResultMsg());
         model.addAttribute("paymentStatus", memberOrder.getId());

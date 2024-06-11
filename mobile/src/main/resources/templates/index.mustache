@@ -8,10 +8,7 @@
 </head>
 
 <body>
-<!--  <h1>NICEPAY TEST</h1>-->
-<!--  <button onclick="serverAuth()">serverAuth 결제하기</button>-->
   <script src="https://pay.nicepay.co.kr/v1/js/"></script>
-<!--  <script src="https://sandbox-pay.nicepay.co.kr/v1/js/ "></script>-->
   <script>
     window.onload = (event) => {
      AUTHNICE.requestPay({
@@ -26,19 +23,6 @@
         }
       });
     }
-<!--    function serverAuth() {-->
-<!--      AUTHNICE.requestPay({-->
-<!--        clientId: '{{clientId}}',-->
-<!--        method: 'card',-->
-<!--        orderId: '{{orderId}}',-->
-<!--        amount: 1004,-->
-<!--        goodsName: '나이스페이-상품',-->
-<!--        returnUrl: 'http://localhost:8082/user/api/v1/payments/serverAuth',-->
-<!--        fnError: function (result) {-->
-<!--          alert('개발자확인용 : ' + result.errorMsg + '')-->
-<!--        }-->
-<!--      });-->
-<!--    }-->
   </script>
 </body>
 
