@@ -3,10 +3,7 @@ package kr.co.softhubglobal.service;
 import kr.co.softhubglobal.dto.center.CenterDTO;
 import kr.co.softhubglobal.dto.center.CenterManagerDetailInfoMapper;
 import kr.co.softhubglobal.dto.center.CenterManagerInfoMapper;
-import kr.co.softhubglobal.entity.center.Center;
-import kr.co.softhubglobal.entity.center.CenterManager;
-import kr.co.softhubglobal.entity.center.CenterManagerStatus;
-import kr.co.softhubglobal.entity.center.ManagerType;
+import kr.co.softhubglobal.entity.center.*;
 import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
@@ -38,8 +35,8 @@ public class CenterManagerService {
 
     public List<CenterDTO.CenterManagerInfo> getAllCenterManagers(CenterDTO.CenterManagerSearchRequest searchRequest){
         Restrictions restrictions = new Restrictions();
-        if(searchRequest.getBranchId() != null) {
-            restrictions.eq("branch.id", searchRequest.getBranchId());
+        if(searchRequest.getCenterId() != null) {
+            restrictions.eq("center.id", searchRequest.getCenterId());
         }
         if(searchRequest.getName() != null) {
             restrictions.like("user.name", "%" + searchRequest.getName() + "%");
@@ -48,7 +45,7 @@ public class CenterManagerService {
             restrictions.between("registeredDate", searchRequest.getRegisteredDateFrom().atStartOfDay(), searchRequest.getRegisteredDateTo().atTime(23, 59, 59) );
         }
         if(searchRequest.getStatus() != null) {
-            restrictions.eq("center.status", searchRequest.getStatus());
+            restrictions.eq("status", searchRequest.getStatus());
         }
         return centerManagerRepository.findAll(restrictions.output())
                 .stream()
@@ -56,18 +53,20 @@ public class CenterManagerService {
                 .toList();
     }
 
-    public void createCenterManager(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest) {
+    public void createCenterManager(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest, Long userId) {
 
         centerManagerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getManagerInfo());
         centerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getCenterInfo());
 
         if(userRepository.existsByUsernameAndRoleIn(
                 centerManagerCreateRequest.getManagerInfo().getUsername(),
-                List.of(Role.SUPERADMIN, Role.OPERATOR, Role.MANAGER, Role.EMPLOYEE))) {
+                List.of(Role.SUPERADMIN, Role.OPERATOR, Role.MANAGER))
+        ) {
             throw new DuplicateResourceException(
                     messageSource.getMessage("center.manager.username.already.exists", new Object[]{centerManagerCreateRequest.getManagerInfo().getUsername()}, Locale.ENGLISH));
         }
 
+        String stringValueUserId = userId != null ? String.valueOf(userId) : null;
         centerManagerRepository.save(
                 CenterManager.builder()
                         .user(User.builder()
@@ -91,9 +90,15 @@ public class CenterManagerService {
                                 .representativeNumber(centerManagerCreateRequest.getCenterInfo().getRepresentativeNumber())
                                 .email(centerManagerCreateRequest.getCenterInfo().getEmail())
                                 .homepage(centerManagerCreateRequest.getCenterInfo().getHomepage())
+                                .centerType(centerManagerCreateRequest.getHeadCenterId() != null ? CenterType.BRANCH : CenterType.HEAD)
+                                .headCenterId(centerManagerCreateRequest.getHeadCenterId() != null ? centerManagerCreateRequest.getHeadCenterId() : null)
+                                .registeredId(stringValueUserId)
+                                .updatedId(stringValueUserId)
                                 .build()
                         )
                         .status(CenterManagerStatus.APPROVAL_PENDING)
+                        .registeredId(stringValueUserId)
+                        .updatedId(stringValueUserId)
                         .build()
         );
     }

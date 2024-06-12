@@ -19,7 +19,7 @@ public class CenterManagerDetailInfoMapper implements Function<CenterManager, Ce
                         centerManager.getUser().getEmail(),
                         centerManager.getStatus()
                 ),
-                new CenterDTO.BusinessInfo(
+                new CenterDTO.BranchInfo(
                         centerManager.getCenter().getBusinessName(),
                         centerManager.getCenter().getBusinessNumber(),
                         centerManager.getCenter().getRepresentativeNumber(),

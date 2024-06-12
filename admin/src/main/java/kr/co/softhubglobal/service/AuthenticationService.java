@@ -49,7 +49,7 @@ public class AuthenticationService {
         if(user.getRole().equals(Role.MANAGER)){
             CenterManager centerManager = centerManagerRepository.findByUserUsername(user.getUsername())
                     .orElseThrow(() -> new BadCredentialsException("Bad credentials"));
-            switch (centerManager.getCenter().getStatus()) {
+            switch (centerManager.getStatus()) {
                 case REFUSED -> throw new RequestNotAcceptableException("This account has already refused");
                 case WITHDREW -> throw new RequestNotAcceptableException("This account has already withdrawn");
                 case APPROVAL_PENDING -> throw new RequestNotAcceptableException("This account is waiting approve");

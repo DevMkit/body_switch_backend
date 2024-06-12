@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.PageableDTO;
-import kr.co.softhubglobal.entity.branch.BranchType;
 import kr.co.softhubglobal.entity.center.BusinessClassification;
 import kr.co.softhubglobal.entity.center.CenterManagerStatus;
+import kr.co.softhubglobal.entity.center.CenterType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,13 +22,14 @@ public class CenterDTO {
 
         private CenterManagerCreateInfo managerInfo;
         private CenterCreateInfo centerInfo;
+        private Long headCenterId;
     }
 
     @Data
     @EqualsAndHashCode(callSuper = false)
     public static class CenterManagerSearchRequest extends PageableDTO.Request {
 
-        private Long branchId;
+        private Long centerId;
         private String name;
         private LocalDate registeredDateFrom;
         private LocalDate registeredDateTo;
@@ -120,7 +121,7 @@ public class CenterDTO {
     public static class CenterManagerDetailInfo {
 
         private ManagerInfo manageInfo;
-        private BusinessInfo businessInfo;
+        private BranchInfo branchInfo;
     }
 
     @Data
@@ -137,7 +138,7 @@ public class CenterDTO {
 
     @Data
     @AllArgsConstructor
-    public static class BusinessInfo {
+    public static class BranchInfo {
 
         private String businessName;
         private String businessNumber;
@@ -152,15 +153,14 @@ public class CenterDTO {
 
     @Data
     @AllArgsConstructor
-    public static class CenterBranchInfo {
+    public static class CenterInfo {
 
         private Long centerId;
-        private Long branchId;
         private String branchName;
         private String representativeNumber;
         private String representativeName;
         private String representativePhoneNumber;
         private String representativeEmail;
-        private BranchType type;
+        private CenterType type;
     }
 }

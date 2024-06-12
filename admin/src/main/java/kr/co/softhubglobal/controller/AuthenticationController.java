@@ -76,7 +76,7 @@ public class AuthenticationController {
     public ResponseEntity<?> createCenterManager(
             @RequestBody CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest
     ) {
-        centerManagerService.createCenterManager(centerManagerCreateRequest);
+        centerManagerService.createCenterManager(centerManagerCreateRequest, null);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED

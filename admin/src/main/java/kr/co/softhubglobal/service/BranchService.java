@@ -97,7 +97,7 @@ public class BranchService {
                         .toList()
         );
         branch.setBranchType(BranchType.MAIN);
-        centerManager.setBranch(branch);
+//        centerManager.setBranch(branch);
 
         branchRepository.save(branch);
     }

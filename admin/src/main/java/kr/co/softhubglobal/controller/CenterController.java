@@ -35,13 +35,11 @@ public class CenterController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CenterDTO.CenterBranchInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CenterDTO.CenterInfo.class)) }
             )
     })
     @GetMapping
-    public ResponseEntity<?> getAllCenters(
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
+    public ResponseEntity<?> getAllCenters(@AuthenticationPrincipal UserDetails userDetails) {
         return new ResponseEntity<>(
                 centerService.getAllCenterBranches((User) userDetails),
                 HttpStatus.OK
