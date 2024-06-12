@@ -3,11 +3,8 @@ package kr.co.softhubglobal.entity.center;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.branch.Branch;
-import kr.co.softhubglobal.entity.branch.BranchWorkHours;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "center")
@@ -61,10 +58,18 @@ public class Center extends BaseDateEntity {
     @Enumerated(EnumType.STRING)
     private CenterType centerType;
 
-    @OneToMany(mappedBy = "center", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @Column(name = "HEAD_CENTER_ID")
+    private Long headCenterId;
+
+    @Column(name = "REG_ID")
+    private String registeredId;
+
+    @Column(name = "UPD_ID")
+    private String updatedId;
+
+    @OneToOne(mappedBy = "center", cascade = CascadeType.ALL)
     private Branch branch;
 
     @OneToOne(mappedBy = "center", cascade = CascadeType.ALL)
-    private Center center;
+    private CenterManager centerManager;
 }

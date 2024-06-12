@@ -73,7 +73,4 @@ public class Branch extends BaseEntity {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CourseTicket> courseTickets;
-
-    @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL)
-    private CenterManager centerManager;
 }

@@ -30,4 +30,10 @@ public class CenterManager extends BaseDateEntity {
     @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
     private CenterManagerStatus status;
+
+    @Column(name = "REG_ID")
+    private String registeredId;
+
+    @Column(name = "UPD_ID")
+    private String updatedId;
 }
