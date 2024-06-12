@@ -1,13 +1,13 @@
 package kr.co.softhubglobal.dto.center;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.PageableDTO;
+import kr.co.softhubglobal.entity.branch.BranchType;
 import kr.co.softhubglobal.entity.center.BusinessClassification;
-import kr.co.softhubglobal.entity.center.CenterStatus;
+import kr.co.softhubglobal.entity.center.CenterManagerStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +32,7 @@ public class CenterDTO {
         private String name;
         private LocalDate registeredDateFrom;
         private LocalDate registeredDateTo;
-        private CenterStatus status;
+        private CenterManagerStatus status;
     }
 
     @Data
@@ -99,7 +99,6 @@ public class CenterDTO {
         private String email;
 
         private String homepage;
-        private CenterStatus status;
     }
 
     @Data
@@ -113,7 +112,7 @@ public class CenterDTO {
         private String phoneNumber;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime registeredDate;
-        private CenterStatus status;
+        private CenterManagerStatus status;
     }
 
     @Data
@@ -133,6 +132,7 @@ public class CenterDTO {
         private String phoneNumber;
         private String username;
         private String email;
+        private CenterManagerStatus status;
     }
 
     @Data
@@ -148,6 +148,19 @@ public class CenterDTO {
         private String businessType;
         private String address;
         private String addressDetail;
-        private CenterStatus status;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CenterBranchInfo {
+
+        private Long centerId;
+        private Long branchId;
+        private String branchName;
+        private String representativeNumber;
+        private String representativeName;
+        private String representativePhoneNumber;
+        private String representativeEmail;
+        private BranchType type;
     }
 }

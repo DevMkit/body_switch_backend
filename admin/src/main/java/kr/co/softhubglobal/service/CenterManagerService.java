@@ -5,7 +5,7 @@ import kr.co.softhubglobal.dto.center.CenterManagerDetailInfoMapper;
 import kr.co.softhubglobal.dto.center.CenterManagerInfoMapper;
 import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.entity.center.CenterManager;
-import kr.co.softhubglobal.entity.center.CenterStatus;
+import kr.co.softhubglobal.entity.center.CenterManagerStatus;
 import kr.co.softhubglobal.entity.center.ManagerType;
 import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.user.Role;
@@ -68,8 +68,6 @@ public class CenterManagerService {
                     messageSource.getMessage("center.manager.username.already.exists", new Object[]{centerManagerCreateRequest.getManagerInfo().getUsername()}, Locale.ENGLISH));
         }
 
-        CenterStatus status = centerManagerCreateRequest.getCenterInfo().getStatus();
-
         centerManagerRepository.save(
                 CenterManager.builder()
                         .user(User.builder()
@@ -93,10 +91,9 @@ public class CenterManagerService {
                                 .representativeNumber(centerManagerCreateRequest.getCenterInfo().getRepresentativeNumber())
                                 .email(centerManagerCreateRequest.getCenterInfo().getEmail())
                                 .homepage(centerManagerCreateRequest.getCenterInfo().getHomepage())
-                                .status(status != null ? status : CenterStatus.APPROVAL_PENDING)
                                 .build()
                         )
-                        .managerType(ManagerType.STORE)
+                        .status(CenterManagerStatus.APPROVAL_PENDING)
                         .build()
         );
     }

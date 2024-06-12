@@ -16,7 +16,8 @@ public class CenterManagerDetailInfoMapper implements Function<CenterManager, Ce
                         centerManager.getUser().getName(),
                         centerManager.getUser().getPhoneNumber(),
                         centerManager.getUser().getUsername(),
-                        centerManager.getUser().getEmail()
+                        centerManager.getUser().getEmail(),
+                        centerManager.getStatus()
                 ),
                 new CenterDTO.BusinessInfo(
                         centerManager.getCenter().getBusinessName(),
@@ -27,8 +28,7 @@ public class CenterManagerDetailInfoMapper implements Function<CenterManager, Ce
                         centerManager.getCenter().getHomepage(),
                         centerManager.getCenter().getBusinessType(),
                         centerManager.getCenter().getAddress(),
-                        centerManager.getCenter().getAddressDetail(),
-                        centerManager.getCenter().getStatus()
+                        centerManager.getCenter().getAddressDetail()
                 )
         );
     }

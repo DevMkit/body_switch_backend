@@ -17,7 +17,7 @@ public class CenterManagerInfoMapper implements Function<CenterManager, CenterDT
                 centerManager.getUser().getName(),
                 centerManager.getUser().getPhoneNumber(),
                 centerManager.getUser().getRegisteredDate(),
-                centerManager.getCenter().getStatus()
+                centerManager.getStatus()
         );
     }
 }
