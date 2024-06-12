@@ -1,8 +1,10 @@
 package kr.co.softhubglobal.entity.branch;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.center.Center;
+import kr.co.softhubglobal.entity.center.CenterManager;
 import kr.co.softhubglobal.entity.common.BaseEntity;
 import kr.co.softhubglobal.entity.course.CourseTicket;
 import lombok.*;
@@ -23,8 +25,9 @@ public class Branch extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CENTER_ID")
+    @JsonBackReference
     private Center center;
 
     @Column(name = "BRANCH_NAME")
@@ -70,4 +73,7 @@ public class Branch extends BaseEntity {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CourseTicket> courseTickets;
+
+    @OneToOne(mappedBy = "branch", cascade = CascadeType.ALL)
+    private CenterManager centerManager;
 }

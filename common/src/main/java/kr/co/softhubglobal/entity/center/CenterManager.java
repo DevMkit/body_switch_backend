@@ -1,7 +1,6 @@
 package kr.co.softhubglobal.entity.center;
 
 import jakarta.persistence.*;
-import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import kr.co.softhubglobal.entity.user.User;
 import lombok.*;
@@ -28,11 +27,7 @@ public class CenterManager extends BaseDateEntity {
     @JoinColumn(name = "CENTER_ID")
     private Center center;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "BRANCH_ID")
-    private Branch branch;
-
-    @Column(name = "MANAGER_TYPE")
+    @Column(name = "STATUS")
     @Enumerated(EnumType.STRING)
-    private ManagerType managerType;
+    private CenterManagerStatus status;
 }

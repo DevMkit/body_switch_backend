@@ -1,5 +1,5 @@
 package kr.co.softhubglobal.entity.center;
 
-public enum CenterStatus {
+public enum CenterManagerStatus {
     APPROVAL_PENDING, APPROVED, REFUSED, WITHDREW
 }
