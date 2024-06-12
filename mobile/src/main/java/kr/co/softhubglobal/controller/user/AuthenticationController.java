@@ -74,13 +74,27 @@ public class AuthenticationController {
             )
     })
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createMember(
-            @ModelAttribute MemberDTO.MemberCreateRequest memberCreateRequest
-    ) {
+    public ResponseEntity<?> createMember(@ModelAttribute MemberDTO.MemberCreateRequest memberCreateRequest) {
         memberService.createMemberRecord(memberCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
+        );
+    }
+
+    @Operation(summary = "Check username exists")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = {@Content(schema = @Schema(implementation = boolean.class))}
+            )
+    })
+    @PostMapping(value = "/check/username")
+    public ResponseEntity<?> checkUsernameExists(@RequestBody MemberDTO.MemberUsernameCheckRequest memberUsernameCheckRequest) {
+        return new ResponseEntity<>(
+                memberService.checkUsernameExists(memberUsernameCheckRequest),
+                HttpStatus.OK
         );
     }
 }

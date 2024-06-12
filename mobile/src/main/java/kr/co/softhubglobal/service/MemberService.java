@@ -30,6 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoMapper memberInfoMapper;
     private final ObjectValidator<MemberDTO.MemberCreateRequest> memberCreateRequestObjectValidator;
+    private final ObjectValidator<MemberDTO.MemberUsernameCheckRequest> memberUsernameCheckRequestObjectValidator;
     private final MessageSource messageSource;
     private final PasswordEncoder passwordEncoder;
 
@@ -73,5 +74,10 @@ public class MemberService {
                         .regType(MemberRegisteredType.SELF)
                         .build()
         );
+    }
+
+    public boolean checkUsernameExists(MemberDTO.MemberUsernameCheckRequest memberUsernameCheckRequest) {
+        memberUsernameCheckRequestObjectValidator.validate(memberUsernameCheckRequest);
+        return userRepository.existsByUsernameAndRoleIn(memberUsernameCheckRequest.getUsername(), List.of(Role.MEMBER, Role.EMPLOYEE));
     }
 }

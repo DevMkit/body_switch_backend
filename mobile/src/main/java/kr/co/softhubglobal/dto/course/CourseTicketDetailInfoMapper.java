@@ -36,6 +36,8 @@ public class CourseTicketDetailInfoMapper implements Function<CourseTicket, Cour
                         courseTicket.getBranch().getId(),
                         courseTicket.getBranch().getBranchName(),
                         courseTicket.getBranch().getBranchDescription(),
+                        courseTicket.getBranch().getAddress(),
+                        courseTicket.getBranch().getAddressDetail(),
                         courseTicket.getBranch().getBranchWorkHoursList()
                                 .stream()
                                 .map(branchWorkHours -> new CourseTicketDTO.BranchWorkHoursInfo(
@@ -45,8 +47,9 @@ public class CourseTicketDetailInfoMapper implements Function<CourseTicket, Cour
                                         branchWorkHours.getCloseTime()
                                 ))
                                 .toList(),
-                        courseTicket.getBranch().getBranchFacilities().stream().map(BranchFacility::getName).toList(),
                         courseTicket.getBranch().getReservationPolicy(),
+                        courseTicket.getBranch().getBranchFacilities().stream().map(BranchFacility::getName).toList(),
+                        "phoneNumber",
                         courseTicket.getBranch().getBranchDetailDescription()
                 ),
                 courseTicket.getCourseTrainers()

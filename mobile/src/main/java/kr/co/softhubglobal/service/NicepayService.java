@@ -77,8 +77,8 @@ public class NicepayService {
         model.addAttribute("orderId", orderId);
         model.addAttribute("amount", Math.round(courseTicket.getFinalPrice()));
         model.addAttribute("goodsName", courseTicket.getTicketName());
-//        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
-        model.addAttribute("returnUrl", "http://192.168.0.142:8082/user/api/v1/payments/serverAuth");
+        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
+//        model.addAttribute("returnUrl", "http://localhost:8082/user/api/v1/payments/serverAuth");
 //        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
     }
 

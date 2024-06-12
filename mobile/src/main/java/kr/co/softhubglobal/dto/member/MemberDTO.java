@@ -53,6 +53,14 @@ public class MemberDTO {
     }
 
     @Data
+    public static class MemberUsernameCheckRequest {
+
+        @NotNull(message = "member.username.not.null")
+        @NotEmpty(message = "member.username.not.empty")
+        private String username;
+    }
+
+    @Data
     @AllArgsConstructor
     public static class MemberInfo {
 

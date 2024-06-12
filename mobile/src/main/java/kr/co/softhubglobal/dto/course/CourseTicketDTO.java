@@ -61,9 +61,12 @@ public class CourseTicketDTO {
         private Long id;
         private String branchName;
         private String branchDescription;
+        private String address;
+        private String addressDetail;
         private List<BranchWorkHoursInfo> workHours;
-        private List<String> facilities;
         private String reservationPolicy;
+        private List<String> facilities;
+        private String phoneNumber;
         private String branchDetailDescription;
     }
 
