@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface BranchRepository extends JpaRepository<Branch, Long> {
 
-    boolean existsByCenterAndBranchType(Center center, BranchType branchType);
+    boolean existsByCenter(Center center);
 }

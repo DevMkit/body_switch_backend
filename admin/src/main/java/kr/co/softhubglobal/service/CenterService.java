@@ -9,6 +9,7 @@ import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
+import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.BranchRepository;
 import kr.co.softhubglobal.repository.CenterManagerRepository;
 import kr.co.softhubglobal.repository.CenterRepository;
@@ -17,6 +18,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +41,11 @@ public class CenterService {
         }
 
         if(user.getRole().equals(Role.MANAGER)) {
-            Center center = centerRepository.findByCenterManagerUser(user).get();
-            Restrictions restrictions = new Restrictions();
-            Restrictions restrictions1 = new Restrictions(Restrictions.Conn.OR);
+            Center center = centerRepository.findByCenterManagerUser(user)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            messageSource.getMessage("center.not.found", null, Locale.ENGLISH )));
+            Restrictions restrictions = new Restrictions(Restrictions.Conn.OR);
+            Restrictions restrictions1 = new Restrictions();
             restrictions.eq("centerManager.user", user);
             if(center.getCenterType().equals(CenterType.HEAD)) {
                 restrictions1.eq("headCenterId", center.getId());

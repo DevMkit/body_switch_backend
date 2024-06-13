@@ -48,11 +48,7 @@ public class BranchService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("center.id.not.exist", new Object[]{mainBranchCreateRequest.getCenterId()}, Locale.ENGLISH)));
 
-        CenterManager centerManager = centerManagerRepository.findByCenter(center)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        messageSource.getMessage("center.manager.not.exist", new Object[]{mainBranchCreateRequest.getCenterId()}, Locale.ENGLISH)));
-
-        if(branchRepository.existsByCenterAndBranchType(center, BranchType.MAIN)) {
+        if(branchRepository.existsByCenter(center)) {
             throw new DuplicateResourceException(
                     messageSource.getMessage("center.main.branch.exist" , null, Locale.ENGLISH));
         }
