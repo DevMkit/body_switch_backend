@@ -54,10 +54,6 @@ public class Branch extends BaseEntity {
     @Column(name = "BRANCH_DETAIL_DESCRIPTION")
     private String branchDetailDescription;
 
-    @Column(name = "TYPE")
-    @Enumerated(EnumType.STRING)
-    private BranchType branchType;
-
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BranchFacility> branchFacilities;
