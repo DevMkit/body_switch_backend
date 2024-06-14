@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.PageableDTO;
+import kr.co.softhubglobal.dto.branch.BranchDTO;
 import kr.co.softhubglobal.entity.center.BusinessClassification;
 import kr.co.softhubglobal.entity.center.CenterManagerStatus;
 import kr.co.softhubglobal.entity.center.CenterType;
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CenterDTO {
 
@@ -34,6 +36,14 @@ public class CenterDTO {
         private LocalDate registeredDateFrom;
         private LocalDate registeredDateTo;
         private CenterManagerStatus status;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class CenterSearchRequest extends PageableDTO.Request {
+
+        private String branchName;
+        private CenterType type;
     }
 
     @Data
@@ -162,5 +172,15 @@ public class CenterDTO {
         private String representativePhoneNumber;
         private String representativeEmail;
         private CenterType type;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CenterDetailInfo {
+
+        private CenterManagerDetailInfo centerManagerDetailInfo;
+        private BranchDTO.BranchDetailInfo branchDetailInfo;
+        private List<BranchDTO.BranchExerciseRoomInfo> branchExerciseRoomInfoList;
+        private List<String> branchProductList;
     }
 }

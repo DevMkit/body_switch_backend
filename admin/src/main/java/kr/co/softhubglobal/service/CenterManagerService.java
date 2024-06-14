@@ -8,8 +8,11 @@ import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
+import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
+import kr.co.softhubglobal.exception.customExceptions.RequestValidationException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.CenterManagerRepository;
+import kr.co.softhubglobal.repository.CenterRepository;
 import kr.co.softhubglobal.repository.UserRepository;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +22,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class CenterManagerService {
 
     private final UserRepository userRepository;
+    private final CenterRepository centerRepository;
     private final CenterManagerRepository centerManagerRepository;
     private final CenterManagerInfoMapper centerManagerInfoMapper;
     private final CenterManagerDetailInfoMapper centerManagerDetailInfoMapper;
@@ -66,7 +71,27 @@ public class CenterManagerService {
                     messageSource.getMessage("center.manager.username.already.exists", new Object[]{centerManagerCreateRequest.getManagerInfo().getUsername()}, Locale.ENGLISH));
         }
 
-        String stringValueUserId = userId != null ? String.valueOf(userId) : null;
+        String stringValueUserId = null;
+
+        if(userId != null) {
+            stringValueUserId = String.valueOf(userId);
+            if(centerManagerCreateRequest.getHeadCenterId() == null) {
+                throw new RequestValidationException(
+                        messageSource.getMessage("head.center.id.null", null, Locale.ENGLISH));
+            }
+            Center center = centerRepository.findById(centerManagerCreateRequest.getHeadCenterId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            messageSource.getMessage("center.id.not.exist", new Object[]{centerManagerCreateRequest.getHeadCenterId()}, Locale.ENGLISH)));
+            if(!center.getCenterType().equals(CenterType.HEAD)) {
+                throw new RequestNotAcceptableException(
+                        messageSource.getMessage("center.not.head.branch", null, Locale.ENGLISH));
+            }
+            if(!Objects.equals(center.getCenterManager().getUser().getId(), userId)) {
+                throw new RequestNotAcceptableException(
+                        messageSource.getMessage("center.manager.not.match", null, Locale.ENGLISH));
+            }
+        }
+
         centerManagerRepository.save(
                 CenterManager.builder()
                         .user(User.builder()

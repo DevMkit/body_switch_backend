@@ -43,6 +43,7 @@ public class BranchDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class WorkHoursInfo {
 
         private boolean isOpen;
@@ -54,6 +55,7 @@ public class BranchDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class FacilityInfo {
 
         private String name;
@@ -67,5 +69,27 @@ public class BranchDTO {
         private Long branchId;
         private String branchName;
         private String centerName;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BranchDetailInfo {
+
+        private Long branchId;
+        private String branchName;
+        private String branchDescription;
+        private String address;
+        private List<WorkHoursInfo> workHoursInfoList;
+        private String reservationPolicy;
+        private List<FacilityInfo> facilityInfoList;
+        private String branchDetailDescription;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BranchExerciseRoomInfo {
+
+        private Long roomId;
+        private String name;
     }
 }

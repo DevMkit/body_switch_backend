@@ -20,7 +20,7 @@ public class CenterInfoMapper implements Function<Center, CenterDTO.CenterInfo> 
                 center.getCenterManager().getUser().getName(),
                 center.getCenterManager().getUser().getPhoneNumber(),
                 center.getCenterManager().getUser().getEmail(),
-                branch != null ? center.getCenterType() : CenterType.NOT_SET
+                center.getCenterType()
         );
     }
 }
