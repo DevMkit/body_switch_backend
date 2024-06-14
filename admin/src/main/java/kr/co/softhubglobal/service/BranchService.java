@@ -4,7 +4,6 @@ import kr.co.softhubglobal.dto.branch.BranchDTO;
 import kr.co.softhubglobal.dto.branch.BranchInfoMapper;
 import kr.co.softhubglobal.entity.branch.*;
 import kr.co.softhubglobal.entity.center.Center;
-import kr.co.softhubglobal.entity.center.CenterManager;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.BranchExerciseRoomRepository;
@@ -30,7 +29,7 @@ public class BranchService {
     private final BranchExerciseRoomRepository branchExerciseRoomRepository;
     private final BranchInfoMapper branchInfoMapper;
     private final MessageSource messageSource;
-    private final ObjectValidator<BranchDTO.MainBranchCreateRequest> branchCreateRequestObjectValidator;
+    private final ObjectValidator<BranchDTO.BranchCreateRequest> branchCreateRequestObjectValidator;
     private final ObjectValidator<BranchDTO.BranchExerciseRoomCreateRequest> branchExerciseRoomCreateRequestObjectValidator;
 
     public List<BranchDTO.BranchInfo> getAllBranches(){
@@ -41,12 +40,12 @@ public class BranchService {
     }
 
     @Transactional
-    public void createMainBranch(BranchDTO.MainBranchCreateRequest mainBranchCreateRequest) {
-        branchCreateRequestObjectValidator.validate(mainBranchCreateRequest);
+    public void createBranch(BranchDTO.BranchCreateRequest branchCreateRequest) {
+        branchCreateRequestObjectValidator.validate(branchCreateRequest);
 
-        Center center = centerRepository.findById(mainBranchCreateRequest.getCenterId())
+        Center center = centerRepository.findById(branchCreateRequest.getCenterId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        messageSource.getMessage("center.id.not.exist", new Object[]{mainBranchCreateRequest.getCenterId()}, Locale.ENGLISH)));
+                        messageSource.getMessage("center.id.not.exist", new Object[]{branchCreateRequest.getCenterId()}, Locale.ENGLISH)));
 
         if(branchRepository.existsByCenter(center)) {
             throw new DuplicateResourceException(
@@ -55,23 +54,25 @@ public class BranchService {
 
         Branch branch = new Branch();
         branch.setCenter(center);
-        branch.setBranchName(mainBranchCreateRequest.getBranchName());
-        branch.setBranchDescription(mainBranchCreateRequest.getBranchDescription());
+        branch.setBranchName(branchCreateRequest.getBranchName());
+        branch.setBranchDescription(branchCreateRequest.getBranchDescription());
+        branch.setReservationPolicy(branchCreateRequest.getReservationPolicy());
+        branch.setBranchDetailDescription(branchCreateRequest.getBranchDetailDescription());
 
-        if(mainBranchCreateRequest.isAddressSame()) {
+        if(branchCreateRequest.isAddressSame()) {
             branch.setPostalCode(center.getPostalCode());
             branch.setCity(center.getCity());
             branch.setAddress(center.getAddress());
             branch.setAddressDetail(center.getAddressDetail());
         } else {
-            branch.setPostalCode(mainBranchCreateRequest.getPostalCode());
-            branch.setCity(mainBranchCreateRequest.getCity());
-            branch.setAddress(mainBranchCreateRequest.getAddress());
-            branch.setAddressDetail(mainBranchCreateRequest.getAddressDetail());
+            branch.setPostalCode(branchCreateRequest.getPostalCode());
+            branch.setCity(branchCreateRequest.getCity());
+            branch.setAddress(branchCreateRequest.getAddress());
+            branch.setAddressDetail(branchCreateRequest.getAddressDetail());
         }
 
         branch.setBranchWorkHoursList(
-                mainBranchCreateRequest.getWorkHoursInfoList()
+                branchCreateRequest.getWorkHoursInfoList()
                         .stream()
                         .map(workHoursInfo -> BranchWorkHours.builder()
                                 .branch(branch)
@@ -84,16 +85,14 @@ public class BranchService {
         );
 
         branch.setBranchFacilities(
-                mainBranchCreateRequest.getFacilityInfoList()
+                branchCreateRequest.getFacilityInfoList()
                         .stream()
                         .map(facilityInfo -> BranchFacility.builder()
                                 .branch(branch)
-                                .name(facilityInfo.getName())
+                                .name(facilityInfo.getFacilityName())
                                 .build())
                         .toList()
         );
-        branch.setBranchType(BranchType.MAIN);
-//        centerManager.setBranch(branch);
 
         branchRepository.save(branch);
     }

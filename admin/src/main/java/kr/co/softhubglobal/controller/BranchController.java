@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.branch.BranchDTO;
-import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.BranchService;
 import lombok.RequiredArgsConstructor;
@@ -62,10 +61,10 @@ public class BranchController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> createMainBranch(
-            @RequestBody BranchDTO.MainBranchCreateRequest mainBranchCreateRequest
+    public ResponseEntity<?> createBranch(
+            @RequestBody BranchDTO.BranchCreateRequest branchCreateRequest
     ) {
-        branchService.createMainBranch(mainBranchCreateRequest);
+        branchService.createBranch(branchCreateRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED

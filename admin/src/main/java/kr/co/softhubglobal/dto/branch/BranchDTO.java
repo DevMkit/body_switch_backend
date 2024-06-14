@@ -1,10 +1,12 @@
 package kr.co.softhubglobal.dto.branch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -13,7 +15,7 @@ import java.util.List;
 public class BranchDTO {
 
     @Data
-    public static class MainBranchCreateRequest {
+    public static class BranchCreateRequest {
 
         @NotNull(message = "branch.center.id.not.null")
         private Long centerId;
@@ -23,15 +25,15 @@ public class BranchDTO {
         private String branchName;
 
         private String branchDescription;
-
         private boolean isAddressSame;
         private String postalCode;
         private String city;
         private String address;
         private String addressDetail;
-
         private List<WorkHoursInfo> workHoursInfoList;
+        private String reservationPolicy;
         private List<FacilityInfo> facilityInfoList;
+        private String branchDetailDescription;
     }
 
     @Data
@@ -56,11 +58,11 @@ public class BranchDTO {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class FacilityInfo {
 
-        private String name;
+        private String facilityName;
     }
-
 
     @Data
     @AllArgsConstructor
