@@ -68,4 +68,12 @@ public class MemberDTO {
         private String name;
         private String gender;
     }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberUsageInfo {
+        private Integer reservationCount;
+        private Integer ticketCount;
+        private Integer messageCount;
+    }
 }

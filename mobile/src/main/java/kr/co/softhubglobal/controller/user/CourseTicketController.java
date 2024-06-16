@@ -9,11 +9,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.course.CourseTicketDTO;
 import kr.co.softhubglobal.dto.member.MemberDTO;
+import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.CourseTicketService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,9 +43,12 @@ public class CourseTicketController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getCourseTickets(CourseTicketDTO.CourseTicketSearchRequest courseTicketSearchRequest) {
+    public ResponseEntity<?> getCourseTickets(
+            @AuthenticationPrincipal UserDetails userDetails,
+            CourseTicketDTO.CourseTicketSearchRequest courseTicketSearchRequest
+    ) {
         return new ResponseEntity<>(
-                courseTicketService.getCourseTickets(courseTicketSearchRequest),
+                courseTicketService.getCourseTickets(((User) userDetails).getId(), courseTicketSearchRequest),
                 HttpStatus.OK
         );
     }

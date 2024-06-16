@@ -7,9 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import kr.co.softhubglobal.dto.nicepay.NicepayDTO;
 import kr.co.softhubglobal.entity.course.CourseTicket;
 import kr.co.softhubglobal.entity.member.Member;
+import kr.co.softhubglobal.entity.member.MemberCourseTicket;
+import kr.co.softhubglobal.entity.member.MemberCourseTicketStatus;
 import kr.co.softhubglobal.entity.member.MemberOrder;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.CourseTicketRepository;
+import kr.co.softhubglobal.repository.MemberCourseTicketRepository;
 import kr.co.softhubglobal.repository.MemberOrderRepository;
 import kr.co.softhubglobal.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,8 +41,9 @@ public class NicepayService {
     private final String CLIENT_ID = "S2_60f499cba3254923bb4e59134aab10b5";
     private final String SECRET_KEY = "50e14c509632411785747f9fd6ff174a";
 
-    private final MemberOrderRepository memberOrderRepository;
     private final MemberRepository memberRepository;
+    private final MemberOrderRepository memberOrderRepository;
+    private final MemberCourseTicketRepository memberCourseTicketRepository;
     private final CourseTicketRepository courseTicketRepository;
     private final MessageSource messageSource;
 
@@ -82,6 +87,7 @@ public class NicepayService {
 //        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
     }
 
+    @Transactional
     public void createHostedPayment(
             Long userId,
             NicepayDTO.PaymentCreateRequest paymentCreateRequest
@@ -106,6 +112,7 @@ public class NicepayService {
                         .orderId(orderId.toString())
                         .paymentMethod("CARD")
                         .paymentStatus("ORDER_CREATED")
+                        .courseStartDate(paymentCreateRequest.getCourseStartDate())
                         .build()
         );
     }
@@ -159,6 +166,15 @@ public class NicepayService {
 
                 if (resultCode.equalsIgnoreCase("0000")) {
                     System.out.println("Payment Success");
+                    memberCourseTicketRepository.save(
+                            MemberCourseTicket.builder()
+                                    .member(memberOrder.getMember())
+                                    .courseTicket(memberOrder.getCourseTicket())
+                                    .startDate(memberOrder.getCourseStartDate())
+                                    .usedCount(0)
+                                    .status(MemberCourseTicketStatus.ACTIVE)
+                                    .build()
+                    );
                 } else {
                     System.out.println("Payment Failed");
                 }

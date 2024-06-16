@@ -2,6 +2,7 @@ package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.member.MemberDTO;
 import kr.co.softhubglobal.dto.member.MemberInfoMapper;
+import kr.co.softhubglobal.dto.member.MemberUsageInfoMapper;
 import kr.co.softhubglobal.entity.member.LoginProvider;
 import kr.co.softhubglobal.entity.member.Member;
 import kr.co.softhubglobal.entity.member.MemberRegisteredType;
@@ -29,6 +30,7 @@ public class MemberService {
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
     private final MemberInfoMapper memberInfoMapper;
+    private final MemberUsageInfoMapper memberUsageInfoMapper;
     private final ObjectValidator<MemberDTO.MemberCreateRequest> memberCreateRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberUsernameCheckRequest> memberUsernameCheckRequestObjectValidator;
     private final MessageSource messageSource;
@@ -79,5 +81,12 @@ public class MemberService {
     public boolean checkUsernameExists(MemberDTO.MemberUsernameCheckRequest memberUsernameCheckRequest) {
         memberUsernameCheckRequestObjectValidator.validate(memberUsernameCheckRequest);
         return userRepository.existsByUsernameAndRoleIn(memberUsernameCheckRequest.getUsername(), List.of(Role.MEMBER, Role.EMPLOYEE));
+    }
+
+    public MemberDTO.MemberUsageInfo getMemberUsageInformation(Long userId) {
+        return memberRepository.findByUserId(userId)
+                .map(memberUsageInfoMapper)
+                .orElseThrow(() -> new DuplicateResourceException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
     }
 }
