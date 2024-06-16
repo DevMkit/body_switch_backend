@@ -57,9 +57,6 @@ public class Employee extends BaseEntity {
     @Column(name = "LEFT_DATE")
     private LocalDate leftDate;
 
-    @Formula("(SELECT FLOOR(DATEDIFF(CURRENT_DATE(), m.BIRTH_DATE) / 362.25) FROM member m WHERE m.ID = ID)")
-    private Integer age;
-
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<EmployeeResponsibility> responsibilities;

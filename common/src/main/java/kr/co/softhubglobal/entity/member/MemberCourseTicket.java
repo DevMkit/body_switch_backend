@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "member_order")
+@Table(name = "member_course_ticket")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberOrder extends BaseDateEntity {
+public class MemberCourseTicket extends BaseDateEntity {
 
     @Id
     @Column(name = "ID")
@@ -32,27 +32,13 @@ public class MemberOrder extends BaseDateEntity {
     @JoinColumn(name = "COURSE_TICKET_ID")
     private CourseTicket courseTicket;
 
-    @Column(name = "ORDER_ID")
-    private String orderId;
+    @Column(name = "START_DATE")
+    private LocalDate startDate;
 
-    @Column(name = "TID")
-    private String tid;
+    @Column(name = "USED_COUNT")
+    private Integer usedCount;
 
-    @Column(name = "PAYMENT_METHOD")
-    private String paymentMethod;
-
-    @Column(name = "PAYMENT_STATUS")
-    private String paymentStatus;
-
-    @Column(name = "RESULT_CODE")
-    private String resultCode;
-
-    @Column(name = "RESULT_MSG")
-    private String resultMsg;
-
-    @Column(name = "PAID_AT")
-    private LocalDateTime paidAt;
-
-    @Column(name = "COURSE_START_DATE")
-    private LocalDate courseStartDate;
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private MemberCourseTicketStatus status;
 }

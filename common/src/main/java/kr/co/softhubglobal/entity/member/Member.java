@@ -73,5 +73,9 @@ public class Member extends BaseDateEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<MemberOrder> orderList;
+    private List<MemberOrder> orders;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<MemberCourseTicket> courseTickets;
 }
