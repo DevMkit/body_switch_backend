@@ -1,6 +1,5 @@
 package kr.co.softhubglobal.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
@@ -75,6 +73,7 @@ public class NicepayService {
                         .orderId(orderId.toString())
                         .paymentMethod("CARD")
                         .paymentStatus("ORDER_CREATED")
+                        .courseStartDate(paymentCreateRequest.getCourseStartDate())
                         .build()
         );
 
@@ -85,36 +84,6 @@ public class NicepayService {
         model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/serverAuth");
 //        model.addAttribute("returnUrl", "http://localhost:8082/user/api/v1/payments/serverAuth");
 //        model.addAttribute("returnUrl", "http://112.175.61.15:8082/user/api/v1/payments/clientAuth");
-    }
-
-    @Transactional
-    public void createHostedPayment(
-            Long userId,
-            NicepayDTO.PaymentCreateRequest paymentCreateRequest
-    ) {
-
-        Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        messageSource.getMessage("user.account.not.found", new Object[]{paymentCreateRequest.getTicketId()}, Locale.ENGLISH))
-                );
-
-        CourseTicket courseTicket = courseTicketRepository.findById(paymentCreateRequest.getTicketId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        messageSource.getMessage("course.ticket.id.not.exist", new Object[]{paymentCreateRequest.getTicketId()}, Locale.ENGLISH))
-                );
-
-        UUID orderId = UUID.randomUUID();
-
-        memberOrderRepository.save(
-                MemberOrder.builder()
-                        .member(member)
-                        .courseTicket(courseTicket)
-                        .orderId(orderId.toString())
-                        .paymentMethod("CARD")
-                        .paymentStatus("ORDER_CREATED")
-                        .courseStartDate(paymentCreateRequest.getCourseStartDate())
-                        .build()
-        );
     }
 
     public MemberOrder approvePayment(
