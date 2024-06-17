@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jws;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
-import kr.co.softhubglobal.entity.user.UserType;
 import kr.co.softhubglobal.security.TokenProvider;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;

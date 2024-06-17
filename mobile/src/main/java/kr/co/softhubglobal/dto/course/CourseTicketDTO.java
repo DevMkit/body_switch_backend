@@ -1,9 +1,11 @@
 package kr.co.softhubglobal.dto.course;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import kr.co.softhubglobal.entity.course.CourseClassType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class CourseTicketDTO {
         private double discountRate;
         private double finalPrice;
         private String classDetail;
+        private Integer usageCount;
+        private Integer usagePeriod;
         private List<String> images;
         private List<CourseCurriculumInfo> curriculumInfoList;
         private CourseTicketDTO.BranchInfo branchInfo;
@@ -91,5 +95,21 @@ public class CourseTicketDTO {
         private String image;
         private List<String> responsibilities;
         private String introduction;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class ActiveCourseTicketInfo {
+
+        private Long courseTicketId;
+        private CourseClassType classType;
+        private String branchName;
+        private String ticketName;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate issueDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate expireDate;
+        private Integer usedCount;
+        private Integer usageCount;
     }
 }

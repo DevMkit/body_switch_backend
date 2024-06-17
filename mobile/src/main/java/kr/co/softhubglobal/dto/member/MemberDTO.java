@@ -1,17 +1,19 @@
 package kr.co.softhubglobal.dto.member;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import kr.co.softhubglobal.dto.course.CourseTicketDTO;
+import kr.co.softhubglobal.entity.course.CourseClassType;
 import kr.co.softhubglobal.entity.member.Gender;
+import kr.co.softhubglobal.entity.member.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class MemberDTO {
 
@@ -61,6 +63,23 @@ public class MemberDTO {
     }
 
     @Data
+    public static class MemberReservationSearchRequest {
+
+        private ReservationStatus reservationStatus;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate fromDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate endDate;
+    }
+
+    @Data
+    public static class MemberReservationCancelRequest {
+
+        @NotNull(message = "member.reservation.id.not.null")
+        private Long reservationId;
+    }
+
+    @Data
     @AllArgsConstructor
     public static class MemberInfo {
 
@@ -75,5 +94,42 @@ public class MemberDTO {
         private Integer reservationCount;
         private Integer ticketCount;
         private Integer messageCount;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberReservationInfo {
+
+        private Long reservationId;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate reservationDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime startTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime endTime;
+        private String className;
+        private String exerciseRoom;
+        private String trainerName;
+        private CourseClassType courseClassType;
+        private String branchName;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberReservationDetailInfo {
+
+        private Long reservationId;
+        private CourseClassType courseClassType;
+        private String branchName;
+        private String className;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate reservationDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime startTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        private LocalTime endTime;
+        private String exerciseRoom;
+        private String trainerName;
+        private CourseTicketDTO.ActiveCourseTicketInfo activeCourseTicketInfo;
     }
 }

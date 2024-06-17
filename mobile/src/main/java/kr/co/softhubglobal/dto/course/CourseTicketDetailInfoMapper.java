@@ -22,6 +22,8 @@ public class CourseTicketDetailInfoMapper implements Function<CourseTicket, Cour
                 courseTicket.getDiscountRate(),
                 courseTicket.getFinalPrice(),
                 courseTicket.getClassDetail(),
+                courseTicket.getUsageCount(),
+                courseTicket.getUsagePeriod(),
                 courseTicket.getCourseTicketImages().stream().map(CourseTicketImage::getImageUrl).toList(),
                 courseTicket.getCourseCurriculumList()
                         .stream()

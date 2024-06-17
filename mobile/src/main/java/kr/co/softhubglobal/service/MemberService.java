@@ -1,16 +1,16 @@
 package kr.co.softhubglobal.service;
 
-import kr.co.softhubglobal.dto.member.MemberDTO;
-import kr.co.softhubglobal.dto.member.MemberInfoMapper;
-import kr.co.softhubglobal.dto.member.MemberUsageInfoMapper;
-import kr.co.softhubglobal.entity.member.LoginProvider;
-import kr.co.softhubglobal.entity.member.Member;
-import kr.co.softhubglobal.entity.member.MemberRegisteredType;
-import kr.co.softhubglobal.entity.member.MemberStatus;
+import kr.co.softhubglobal.dto.member.*;
+import kr.co.softhubglobal.entity.common.Restrictions;
+import kr.co.softhubglobal.entity.member.*;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
+import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
+import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
+import kr.co.softhubglobal.repository.MemberCourseTicketRepository;
 import kr.co.softhubglobal.repository.MemberRepository;
+import kr.co.softhubglobal.repository.MemberReservationRepository;
 import kr.co.softhubglobal.repository.UserRepository;
 import kr.co.softhubglobal.utils.FileUploader;
 import kr.co.softhubglobal.utils.RandomCodeGenerator;
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,10 +30,15 @@ public class MemberService {
 
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
+    private final MemberReservationRepository memberReservationRepository;
+    private final MemberCourseTicketRepository memberCourseTicketRepository;
     private final MemberInfoMapper memberInfoMapper;
     private final MemberUsageInfoMapper memberUsageInfoMapper;
+    private final MemberReservationInfoMapper memberReservationInfoMapper;
+    private final MemberReservationDetailInfoMapper memberReservationDetailInfoMapper;
     private final ObjectValidator<MemberDTO.MemberCreateRequest> memberCreateRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberUsernameCheckRequest> memberUsernameCheckRequestObjectValidator;
+    private final ObjectValidator<MemberDTO.MemberReservationCancelRequest> memberReservationCancelRequestObjectValidator;
     private final MessageSource messageSource;
     private final PasswordEncoder passwordEncoder;
 
@@ -88,5 +94,54 @@ public class MemberService {
                 .map(memberUsageInfoMapper)
                 .orElseThrow(() -> new DuplicateResourceException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
+    }
+
+    public List<MemberDTO.MemberReservationInfo> getMemberReservations(Long userId, MemberDTO.MemberReservationSearchRequest memberReservationSearchRequest) {
+        Restrictions restrictions = new Restrictions();
+        restrictions.eq("member.user.id", userId);
+        if(memberReservationSearchRequest.getReservationStatus() != null) {
+            restrictions.eq("status", memberReservationSearchRequest.getReservationStatus());
+        }
+        if(memberReservationSearchRequest.getFromDate() != null && memberReservationSearchRequest.getEndDate() != null) {
+            restrictions.between("reservationDate", memberReservationSearchRequest.getFromDate(), memberReservationSearchRequest.getEndDate());
+        }
+        return memberReservationRepository.findAll(restrictions.output())
+                .stream()
+                .map(memberReservationInfoMapper)
+                .toList();
+    }
+
+    public MemberDTO.MemberReservationDetailInfo getMemberReservationDetailInfoById(Long reservationId) {
+        return memberReservationRepository.findById(reservationId)
+                .map(memberReservationDetailInfoMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("member.reservation.id.not.found", new Object[]{reservationId}, Locale.ENGLISH)
+                ));
+    }
+
+    @Transactional
+    public void cancelReservationById(MemberDTO.MemberReservationCancelRequest memberReservationCancelRequest) {
+        memberReservationCancelRequestObjectValidator.validate(memberReservationCancelRequest);
+
+        MemberReservation memberReservation = memberReservationRepository.findById(memberReservationCancelRequest.getReservationId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("member.reservation.id.not.found", new Object[]{memberReservationCancelRequest.getReservationId()}, Locale.ENGLISH)
+                ));
+        if(memberReservation.getStatus().equals(ReservationStatus.CANCELED)) {
+            throw new RequestNotAcceptableException(
+                    messageSource.getMessage("member.reservation.canceled.already", null, Locale.ENGLISH));
+        }
+        memberReservation.setStatus(ReservationStatus.CANCELED);
+
+        MemberCourseTicket memberCourseTicket = memberReservation.getMember().getCourseTickets()
+                .stream()
+                .filter(currentMemberCourseTicket -> currentMemberCourseTicket.getCourseTicket().equals(memberReservation.getCourseClassTime().getCourseClass().getCourseTicket()))
+                .toList()
+                .get(0);
+
+        memberCourseTicket.setUsedCount(memberCourseTicket.getUsedCount() - 1);
+
+        memberReservationRepository.save(memberReservation);
+        memberCourseTicketRepository.save(memberCourseTicket);
     }
 }

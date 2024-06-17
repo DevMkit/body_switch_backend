@@ -1,7 +1,6 @@
 package kr.co.softhubglobal.controller.user;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,13 +13,11 @@ import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.AuthenticationService;
 import kr.co.softhubglobal.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Locale;
 
