@@ -67,12 +67,12 @@ public class CenterService {
             restrictions.addChild(restrictions2);
         }
 
-        PageRequest pageRequest = PageRequest.of(centerSearchRequest.getPage(), centerSearchRequest.getLimit());
+        PageRequest pageRequest = PageRequest.of(centerSearchRequest.getPage() - 1, centerSearchRequest.getLimit());
         Page<Center> result = centerRepository.findAll(restrictions.output(), pageRequest);
 
         PageableDTO.Response response = new PageableDTO.Response();
         response.setTotalElements(result.getTotalElements());
-        response.setNumber(result.getNumber());
+        response.setNumber(result.getNumber() + 1);
         response.setSize(result.getSize());
         response.setContent(
                 result.getContent()
