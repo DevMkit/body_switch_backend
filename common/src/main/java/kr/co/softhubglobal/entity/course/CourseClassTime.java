@@ -1,12 +1,14 @@
 package kr.co.softhubglobal.entity.course;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "course_class_time")
@@ -36,4 +38,8 @@ public class CourseClassTime extends BaseDateEntity {
 
     @Column(name = "END_TIME")
     private LocalTime endTime;
+
+    @OneToMany(mappedBy = "courseClassTime", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<CourseClassTimeMember> courseClassTimeMembers;
 }
