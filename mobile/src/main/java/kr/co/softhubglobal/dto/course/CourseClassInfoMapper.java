@@ -16,7 +16,9 @@ public class CourseClassInfoMapper implements Function<CourseClass, CourseClassD
                 courseClass.getExerciseRoom().getName(),
                 courseClass.getEmployee().getUser().getName(),
                 0,
-                courseClass.getMembersMaxCount()
+                courseClass.getMembersMaxCount(),
+                courseClass.getCourseClassTimeList().get(0).getStartTime(),
+                courseClass.getCourseClassTimeList().get(0).getEndTime()
         );
     }
 }

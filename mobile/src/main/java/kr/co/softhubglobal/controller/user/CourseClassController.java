@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.course.CourseClassDTO;
 import kr.co.softhubglobal.dto.course.CourseTicketDTO;
+import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.service.CourseClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,16 +36,16 @@ public class CourseClassController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CourseClassDTO.CourseClassInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = CourseClassDTO.CourseClassTimeInfo.class)) }
             )
     })
     @GetMapping
     public ResponseEntity<?> getCourseClasses(
             @AuthenticationPrincipal UserDetails userDetails,
-            CourseTicketDTO.CourseTicketSearchRequest courseTicketSearchRequest
+            CourseClassDTO.CourseClassSearchRequest courseClassSearchRequest
     ) {
         return new ResponseEntity<>(
-                courseClassService.getCourseClasses(),
+                courseClassService.getCourseClasses(((User) userDetails).getId(), courseClassSearchRequest),
                 HttpStatus.OK
         );
     }
