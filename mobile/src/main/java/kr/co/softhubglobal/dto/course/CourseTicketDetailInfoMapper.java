@@ -15,7 +15,7 @@ public class CourseTicketDetailInfoMapper implements Function<CourseTicket, Cour
     public CourseTicketDTO.CourseTicketDetailInfo apply(CourseTicket courseTicket) {
         return new CourseTicketDTO.CourseTicketDetailInfo(
                 courseTicket.getId(),
-                courseTicket.getClassType().toString(),
+                courseTicket.getClassType(),
                 courseTicket.getBranch().getBranchName(),
                 courseTicket.getTicketName(),
                 courseTicket.getRegularPrice(),

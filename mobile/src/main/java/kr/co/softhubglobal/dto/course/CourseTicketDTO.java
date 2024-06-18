@@ -22,7 +22,7 @@ public class CourseTicketDTO {
     public static class CourseTicketInfo {
 
         private Long id;
-        private String classType;
+        private CourseClassType classType;
         private String ticketName;
         private String image;
         private double finalPrice;
@@ -33,7 +33,7 @@ public class CourseTicketDTO {
     public static class CourseTicketDetailInfo {
 
         private Long id;
-        private String classType;
+        private CourseClassType classType;
         private String branchName;
         private String ticketName;
         private double regularPrice;

@@ -13,7 +13,7 @@ public class CourseTicketInfoMapper implements Function<CourseTicket, CourseTick
     public CourseTicketDTO.CourseTicketInfo apply(CourseTicket courseTicket) {
         return new CourseTicketDTO.CourseTicketInfo(
                 courseTicket.getId(),
-                courseTicket.getClassType().toString(),
+                courseTicket.getClassType(),
                 courseTicket.getTicketName(),
                 courseTicket.getCourseTicketImages().stream().findAny().map(CourseTicketImage::getImageUrl).orElse(null),
                 courseTicket.getFinalPrice()

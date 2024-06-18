@@ -21,6 +21,15 @@ public class CourseClassDTO {
     }
 
     @Data
+    public static class TrainerCourseClassSearchRequest {
+
+        private Long branchId;
+        private CourseClassType type;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate classDate;
+    }
+
+    @Data
     public static class CourseClassTimeReserveRequest {
 
         @NotNull(message = "course.class.time.id.not.null")

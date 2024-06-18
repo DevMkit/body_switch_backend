@@ -39,7 +39,6 @@ public class CourseClassService {
             Long userId,
             CourseClassDTO.CourseClassSearchRequest courseClassSearchRequest
     ) {
-
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new DuplicateResourceException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
@@ -57,6 +56,12 @@ public class CourseClassService {
             restrictions.eq("dayOfWeek", courseClassSearchRequest.getClassDate().getDayOfWeek());
         }
         restrictions.in("courseClass.courseTicket.id", member.getCourseTickets().stream().map(memberCourseTicket -> memberCourseTicket.getCourseTicket().getId()).toList());
+        restrictions.notIn("id", member.getReservations()
+                .stream()
+                .filter(memberReservation -> memberReservation.getStatus().equals(ReservationStatus.RESERVED))
+                .map(memberReservation -> memberReservation.getCourseClassTime().getId())
+                .toList()
+        );
 
         return courseClassTimeRepository.findAll(restrictions.output())
                 .stream()
