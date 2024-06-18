@@ -25,7 +25,7 @@ public class CourseClassTimeMember extends BaseDateEntity {
     @JsonBackReference
     public CourseClassTime courseClassTime;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 }
