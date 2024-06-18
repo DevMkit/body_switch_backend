@@ -52,4 +52,31 @@ public class AuthenticationService {
                 LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault())
         );
     }
+
+    public AuthenticationDTO.AuthenticationResponse trainerLogin(AuthenticationDTO.AuthenticationRequest authenticationRequest) {
+
+        authenticationRequestObjectValidator.validate(authenticationRequest);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()
+                )
+        );
+        User user = (User) authentication.getPrincipal();
+
+        if(!user.getRole().equals(Role.EMPLOYEE)) {
+            throw new BadCredentialsException("Bad credentials");
+        }
+
+        String token = tokenProvider.generate(user.getUsername());
+        Jws<Claims> decodedToken = tokenProvider.validateTokenAndGetJws(token)
+                .orElseThrow(() -> new RuntimeException("Cannot generate token"));
+        Date expiration = decodedToken.getBody().getExpiration();
+
+        return new AuthenticationDTO.AuthenticationResponse(
+                token,
+                LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault())
+        );
+    }
 }

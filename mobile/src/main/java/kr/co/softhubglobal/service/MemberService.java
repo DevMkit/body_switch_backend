@@ -8,10 +8,7 @@ import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
-import kr.co.softhubglobal.repository.MemberCourseTicketRepository;
-import kr.co.softhubglobal.repository.MemberRepository;
-import kr.co.softhubglobal.repository.MemberReservationRepository;
-import kr.co.softhubglobal.repository.UserRepository;
+import kr.co.softhubglobal.repository.*;
 import kr.co.softhubglobal.utils.FileUploader;
 import kr.co.softhubglobal.utils.RandomCodeGenerator;
 import kr.co.softhubglobal.validator.ObjectValidator;
@@ -32,6 +29,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberReservationRepository memberReservationRepository;
     private final MemberCourseTicketRepository memberCourseTicketRepository;
+    private final CourseClassTimeMemberRepository courseClassTimeMemberRepository;
     private final MemberInfoMapper memberInfoMapper;
     private final MemberUsageInfoMapper memberUsageInfoMapper;
     private final MemberReservationInfoMapper memberReservationInfoMapper;
@@ -99,6 +97,7 @@ public class MemberService {
     public List<MemberDTO.MemberReservationInfo> getMemberReservations(Long userId, MemberDTO.MemberReservationSearchRequest memberReservationSearchRequest) {
         Restrictions restrictions = new Restrictions();
         restrictions.eq("member.user.id", userId);
+        restrictions.notIn("status",List.of(ReservationStatus.CANCELED));
         if(memberReservationSearchRequest.getReservationStatus() != null) {
             restrictions.eq("status", memberReservationSearchRequest.getReservationStatus());
         }
@@ -140,8 +139,8 @@ public class MemberService {
                 .get(0);
 
         memberCourseTicket.setUsedCount(memberCourseTicket.getUsedCount() - 1);
-
         memberReservationRepository.save(memberReservation);
         memberCourseTicketRepository.save(memberCourseTicket);
+        courseClassTimeMemberRepository.deleteByCourseClassTimeIdAndMemberId(memberReservation.getCourseClassTime().getId(), memberReservation.getMember().getId());
     }
 }

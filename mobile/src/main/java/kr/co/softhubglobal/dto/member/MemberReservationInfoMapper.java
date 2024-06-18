@@ -19,7 +19,8 @@ public class MemberReservationInfoMapper implements Function<MemberReservation, 
                 memberReservation.getCourseClassTime().getCourseClass().getExerciseRoom().getName(),
                 memberReservation.getCourseClassTime().getCourseClass().getEmployee().getUser().getName(),
                 memberReservation.getCourseClassTime().getCourseClass().getClassType(),
-                memberReservation.getCourseClassTime().getCourseClass().getBranch().getBranchName()
+                memberReservation.getCourseClassTime().getCourseClass().getBranch().getBranchName(),
+                memberReservation.getStatus()
         );
     }
 }

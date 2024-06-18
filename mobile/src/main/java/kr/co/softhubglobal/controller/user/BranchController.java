@@ -12,6 +12,7 @@ import kr.co.softhubglobal.service.BranchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEM
 @Tag(name = "Branch", description = "Branch APIs")
 @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('MEMBER')")
 public class BranchController {
 
     private final BranchService branchService;

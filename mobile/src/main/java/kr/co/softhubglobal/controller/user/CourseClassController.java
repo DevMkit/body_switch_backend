@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEM
 @Tag(name = "Course Class", description = "Course Class APIs")
 @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('MEMBER')")
 public class CourseClassController {
 
     private final CourseClassService courseClassService;

@@ -4,4 +4,6 @@ import kr.co.softhubglobal.entity.course.CourseClassTimeMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CourseClassTimeMemberRepository extends JpaRepository<CourseClassTimeMember, Long> {
+
+    void deleteByCourseClassTimeIdAndMemberId(Long courseClassTimeId, String memberId);
 }

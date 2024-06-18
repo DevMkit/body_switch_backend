@@ -14,6 +14,7 @@ import kr.co.softhubglobal.service.CourseTicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEM
 @Tag(name = "Course Ticket", description = "Course ticket APIs")
 @SecurityRequirement(name = BEARER_KEY_SECURITY_SCHEME)
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('MEMBER')")
 public class CourseTicketController {
 
     private final CourseTicketService courseTicketService;

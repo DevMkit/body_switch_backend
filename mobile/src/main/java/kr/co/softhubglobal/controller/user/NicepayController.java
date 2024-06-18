@@ -9,6 +9,7 @@ import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.service.NicepayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;

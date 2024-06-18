@@ -112,6 +112,7 @@ public class MemberDTO {
         private String trainerName;
         private CourseClassType courseClassType;
         private String branchName;
+        private ReservationStatus status;
     }
 
     @Data

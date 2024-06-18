@@ -15,7 +15,7 @@ public class CourseClassTimeInfoMapper implements Function<CourseClassTime, Cour
                 courseClassTime.getCourseClass().getClassName(),
                 courseClassTime.getCourseClass().getExerciseRoom().getName(),
                 courseClassTime.getCourseClass().getEmployee().getUser().getName(),
-                0,
+                courseClassTime.getCourseClassTimeMembers().size(),
                 courseClassTime.getCourseClass().getMembersMaxCount(),
                 courseClassTime.getStartTime(),
                 courseClassTime.getEndTime()

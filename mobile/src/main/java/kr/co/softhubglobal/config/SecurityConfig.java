@@ -48,7 +48,8 @@ public class SecurityConfig {
             "/user/api/v1/auth/**",
             "/user/api/v1/payments/serverAuth",
             "/user/api/v1/payments/clientAuth",
-            "/user/api/v1/payments/hook"
+            "/user/api/v1/payments/hook",
+            "/trainer/api/v1/auth/**",
     };
 
     @Bean
