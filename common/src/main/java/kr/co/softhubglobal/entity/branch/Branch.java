@@ -54,11 +54,11 @@ public class Branch extends BaseEntity {
     @Column(name = "BRANCH_DETAIL_DESCRIPTION")
     private String branchDetailDescription;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<BranchFacility> branchFacilities;
 
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<BranchWorkHours> branchWorkHoursList;
 
