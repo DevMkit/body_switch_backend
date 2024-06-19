@@ -68,5 +68,13 @@ public class Branch extends BaseEntity {
 
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     @JsonManagedReference
+    private List<BranchProductCategory> branchProductCategories;
+
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<BranchProduct> branchProducts;
+
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<CourseTicket> courseTickets;
 }
