@@ -6,10 +6,7 @@ import kr.co.softhubglobal.entity.branch.*;
 import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
-import kr.co.softhubglobal.repository.BranchExerciseRoomRepository;
-import kr.co.softhubglobal.repository.BranchRepository;
-import kr.co.softhubglobal.repository.CenterManagerRepository;
-import kr.co.softhubglobal.repository.CenterRepository;
+import kr.co.softhubglobal.repository.*;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -24,7 +21,6 @@ import java.util.Locale;
 public class BranchService {
 
     private final CenterRepository centerRepository;
-    private final CenterManagerRepository centerManagerRepository;
     private final BranchRepository branchRepository;
     private final BranchExerciseRoomRepository branchExerciseRoomRepository;
     private final BranchInfoMapper branchInfoMapper;
@@ -93,6 +89,67 @@ public class BranchService {
                                 .build())
                         .toList()
         );
+
+        branchRepository.save(branch);
+    }
+
+    @Transactional
+    public void updateBranchById(Long branchId, BranchDTO.BranchUpdateRequest branchUpdateRequest) {
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("branch.id.not.exist", new Object[]{branchId}, Locale.ENGLISH)));
+
+        if(branchUpdateRequest.getBranchName() != null) {
+            branch.setBranchName(branchUpdateRequest.getBranchName());
+        }
+        if(branchUpdateRequest.getBranchDescription() != null) {
+            branch.setBranchDescription(branchUpdateRequest.getBranchDescription());
+        }
+        if(branchUpdateRequest.isAddressSame()) {
+            branch.setPostalCode(branch.getCenter().getPostalCode());
+            branch.setCity(branch.getCenter().getCity());
+            branch.setAddress(branch.getCenter().getAddress());
+            branch.setAddressDetail(branch.getCenter().getAddressDetail());
+        } else {
+            branch.setPostalCode(branchUpdateRequest.getPostalCode());
+            branch.setCity(branchUpdateRequest.getCity());
+            branch.setAddress(branchUpdateRequest.getAddress());
+            branch.setAddressDetail(branchUpdateRequest.getAddressDetail());
+        }
+        if(branchUpdateRequest.getWorkHoursInfoList() != null && !branchUpdateRequest.getWorkHoursInfoList().isEmpty()) {
+            branch.getBranchWorkHoursList().clear();
+            branch.getBranchWorkHoursList().addAll(
+                    branchUpdateRequest.getWorkHoursInfoList()
+                            .stream()
+                            .map(workHoursInfo -> BranchWorkHours.builder()
+                                    .branch(branch)
+                                    .dayOfWeek(workHoursInfo.getDayOfWeek())
+                                    .isOpen(workHoursInfo.isOpen())
+                                    .openTime(workHoursInfo.getOpenTime())
+                                    .closeTime(workHoursInfo.getCloseTime())
+                                    .build())
+                            .toList()
+            );
+        }
+        if(branchUpdateRequest.getReservationPolicy() != null) {
+            branch.setReservationPolicy(branchUpdateRequest.getReservationPolicy());
+        }
+        if(branchUpdateRequest.getFacilityInfoList() != null && !branchUpdateRequest.getFacilityInfoList().isEmpty()) {
+            branch.getBranchFacilities().clear();
+            branch.getBranchFacilities().addAll(
+                    branchUpdateRequest.getFacilityInfoList()
+                            .stream()
+                            .map(facilityInfo -> BranchFacility.builder()
+                                    .branch(branch)
+                                    .name(facilityInfo.getFacilityName())
+                                    .build())
+                            .toList()
+            );
+        }
+        if(branchUpdateRequest.getBranchDetailDescription() != null) {
+            branch.setBranchDetailDescription(branchUpdateRequest.getBranchDetailDescription());
+        }
 
         branchRepository.save(branch);
     }

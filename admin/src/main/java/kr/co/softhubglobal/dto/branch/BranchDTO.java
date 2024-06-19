@@ -37,6 +37,22 @@ public class BranchDTO {
     }
 
     @Data
+    public static class BranchUpdateRequest {
+
+        private String branchName;
+        private String branchDescription;
+        private boolean isAddressSame;
+        private String postalCode;
+        private String city;
+        private String address;
+        private String addressDetail;
+        private List<WorkHoursInfo> workHoursInfoList;
+        private String reservationPolicy;
+        private List<FacilityInfo> facilityInfoList;
+        private String branchDetailDescription;
+    }
+
+    @Data
     public static class BranchExerciseRoomCreateRequest {
 
         @NotNull(message = "branch.room.name.not.null")

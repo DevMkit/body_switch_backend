@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -68,6 +71,31 @@ public class BranchController {
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
+        );
+    }
+
+    @Operation(summary = "Update a branch record by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(schema = @Schema(implementation = ResponseDTO.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @PutMapping("{branchId}")
+    public ResponseEntity<ResponseDTO> updateMemberById(
+            @PathVariable("branchId") Long branchId,
+            @RequestBody BranchDTO.BranchUpdateRequest branchUpdateRequest
+    ) {
+        branchService.updateBranchById(branchId, branchUpdateRequest);
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.update", null, Locale.ENGLISH)),
+                HttpStatus.OK
         );
     }
 
