@@ -31,6 +31,7 @@ public class MemberService {
     private final MemberCourseTicketRepository memberCourseTicketRepository;
     private final CourseClassTimeMemberRepository courseClassTimeMemberRepository;
     private final MemberInfoMapper memberInfoMapper;
+    private final MemberDetailInfoMapper memberDetailInfoMapper;
     private final MemberUsageInfoMapper memberUsageInfoMapper;
     private final MemberReservationInfoMapper memberReservationInfoMapper;
     private final MemberReservationDetailInfoMapper memberReservationDetailInfoMapper;
@@ -40,11 +41,18 @@ public class MemberService {
     private final MessageSource messageSource;
     private final PasswordEncoder passwordEncoder;
 
-    public List<MemberDTO.MemberInfo> getAllMembers() {
-        return memberRepository.findAll()
-                .stream()
+    public MemberDTO.MemberInfo getMemberInfo(Long userId) {
+        return memberRepository.findByUserId(userId)
                 .map(memberInfoMapper)
-                .toList();
+                .orElseThrow(() -> new DuplicateResourceException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
+    }
+
+    public MemberDTO.MemberDetailInfo getMemberDetailInfoById(Long userId) {
+        return memberRepository.findByUserId(userId)
+                .map(memberDetailInfoMapper)
+                .orElseThrow(() -> new DuplicateResourceException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
     }
 
     public void createMemberRecord(MemberDTO.MemberCreateRequest memberCreateRequest) {

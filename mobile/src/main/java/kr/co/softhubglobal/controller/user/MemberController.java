@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +38,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MessageSource messageSource;
 
-    @Operation(summary = "Retrieve all member records")
-    @Hidden
+    @Operation(summary = "Retrieve member info")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -47,9 +47,30 @@ public class MemberController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getAllMembers() {
+    public ResponseEntity<?> getMemberInfo(@AuthenticationPrincipal UserDetails userDetails) {
         return new ResponseEntity<>(
-                memberService.getAllMembers(),
+                memberService.getMemberInfo(((User) userDetails).getId()),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Retrieve a member detail info by its Id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MemberDTO.MemberDetailInfo.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @GetMapping("detail-info")
+    public ResponseEntity<?> getMemberDetailInfoById(@AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity<>(
+                memberService.getMemberDetailInfoById(((User) userDetails).getId()),
                 HttpStatus.OK
         );
     }

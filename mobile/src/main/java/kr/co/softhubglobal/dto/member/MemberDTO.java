@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.transform.sax.SAXResult;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -83,9 +84,27 @@ public class MemberDTO {
     @AllArgsConstructor
     public static class MemberInfo {
 
+        private String memberId;
+        private String name;
+        private String profileImage;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberDetailInfo {
+
+        private String memberId;
+        private String profileImage;
         private String username;
         private String name;
-        private String gender;
+        private String phoneNumber;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private Gender gender;
+        private String email;
+        private String postalCode;
+        private String address;
+        private String addressDetail;
     }
 
     @Data

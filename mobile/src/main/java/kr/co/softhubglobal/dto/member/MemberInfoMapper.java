@@ -12,9 +12,9 @@ public class MemberInfoMapper implements Function<Member, MemberDTO.MemberInfo> 
     public MemberDTO.MemberInfo apply(Member member) {
 
         return new MemberDTO.MemberInfo(
-                member.getUser().getUsername(),
+                member.getId(),
                 member.getUser().getName(),
-                member.getGender().toString()
+                member.getProfileImage()
         );
     }
 }
