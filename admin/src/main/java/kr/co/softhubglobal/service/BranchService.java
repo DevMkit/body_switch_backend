@@ -23,10 +23,14 @@ public class BranchService {
     private final CenterRepository centerRepository;
     private final BranchRepository branchRepository;
     private final BranchExerciseRoomRepository branchExerciseRoomRepository;
+    private final BranchProductCategoryRepository branchProductCategoryRepository;
+    private final BranchProductRepository branchProductRepository;
     private final BranchInfoMapper branchInfoMapper;
     private final MessageSource messageSource;
     private final ObjectValidator<BranchDTO.BranchCreateRequest> branchCreateRequestObjectValidator;
     private final ObjectValidator<BranchDTO.BranchExerciseRoomCreateRequest> branchExerciseRoomCreateRequestObjectValidator;
+    private final ObjectValidator<BranchDTO.BranchProductCategoryCreateRequest> branchProductCategoryCreateRequestObjectValidator;
+    private final ObjectValidator<BranchDTO.BranchProductCreateRequest> branchProductCreateRequestObjectValidator;
 
     public List<BranchDTO.BranchInfo> getAllBranches(){
         return branchRepository.findAll()
@@ -166,6 +170,39 @@ public class BranchService {
                 BranchExerciseRoom.builder()
                         .branch(branch)
                         .name(branchExerciseRoomCreateRequest.getRoomName())
+                        .build()
+        );
+    }
+
+    public void createBranchProductCategory(Long branchId, BranchDTO.BranchProductCategoryCreateRequest branchProductCategoryCreateRequest) {
+        branchProductCategoryCreateRequestObjectValidator.validate(branchProductCategoryCreateRequest);
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("branch.id.not.exist", new Object[]{branchId}, Locale.ENGLISH)));
+
+        branchProductCategoryRepository.save(
+                BranchProductCategory.builder()
+                        .branch(branch)
+                        .name(branchProductCategoryCreateRequest.getCategoryName())
+                        .build()
+        );
+    }
+
+    public void createBranchProduct(Long branchId, BranchDTO.BranchProductCreateRequest branchProductCreateRequest) {
+        branchProductCreateRequestObjectValidator.validate(branchProductCreateRequest);
+
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("branch.id.not.exist", new Object[]{branchId}, Locale.ENGLISH)));
+
+        branchProductRepository.save(
+                BranchProduct.builder()
+                        .branch(branch)
+                        .branchCategoryId(branchProductCreateRequest.getCategoryId())
+                        .name(branchProductCreateRequest.getProductName())
+                        .price(branchProductCreateRequest.getPrice())
+                        .stockQuantity(branchProductCreateRequest.getQuantity())
                         .build()
         );
     }

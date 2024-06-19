@@ -61,6 +61,31 @@ public class BranchDTO {
     }
 
     @Data
+    public static class BranchProductCategoryCreateRequest {
+
+        @NotNull(message = "branch.product.category.name.not.null")
+        @NotEmpty(message = "branch.product.category.name.not.empty")
+        private String categoryName;
+    }
+
+    @Data
+    public static class BranchProductCreateRequest {
+
+        @NotNull(message = "branch.product.category.id.not.null")
+        private Long categoryId;
+
+        @NotNull(message = "branch.product.name.not.null")
+        @NotEmpty(message = "branch.product.name.not.empty")
+        private String productName;
+
+        @NotNull(message = "branch.product.price.not.null")
+        private Integer price;
+
+        @NotNull(message = "branch.product.quantity.not.null")
+        private Integer quantity;
+    }
+
+    @Data
     @AllArgsConstructor
     public static class WorkHoursInfo {
 

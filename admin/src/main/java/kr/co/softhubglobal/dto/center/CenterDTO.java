@@ -181,6 +181,26 @@ public class CenterDTO {
         private CenterManagerDetailInfo centerManagerDetailInfo;
         private BranchDTO.BranchDetailInfo branchDetailInfo;
         private List<BranchDTO.BranchExerciseRoomInfo> branchExerciseRoomInfoList;
-        private List<String> branchProductList;
+        private List<BranchProductCategoryInfo> branchProductCategoryList;
+        private List<BranchProductInfo> branchProductList;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BranchProductCategoryInfo {
+
+        private Long categoryId;
+        private String categoryName;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class BranchProductInfo {
+
+        private Long productId;
+        private Long categoryId;
+        private String productName;
+        private Integer price;
+        private Integer quantity;
     }
 }

@@ -70,7 +70,8 @@ public class SecurityConfig {
                     config.setAllowedOrigins(Arrays.asList(
                             "http://localhost:3003",
                             "http://112.175.61.15:3003",
-                            "http://192.168.0.144:3003"
+                            "http://192.168.0.144:3003",
+                            "http://112.175.61.15:80"
                     ));
                     config.setAllowedMethods(Collections.singletonList("*"));
                     config.setAllowedHeaders(Collections.singletonList("*"));

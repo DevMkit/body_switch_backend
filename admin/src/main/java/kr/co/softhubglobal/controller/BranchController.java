@@ -123,4 +123,54 @@ public class BranchController {
                 HttpStatus.CREATED
         );
     }
+
+    @Operation(summary = "Create a branch product category")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "CREATED",
+                    content = {@Content(schema = @Schema(implementation = ResponseDTO.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            )
+    })
+    @PostMapping("/{branchId}/product/category")
+    public ResponseEntity<?> createBranchProductCategory(
+            @PathVariable("branchId") Long branchId,
+            @RequestBody BranchDTO.BranchProductCategoryCreateRequest branchProductCategoryCreateRequest
+    ) {
+        branchService.createBranchProductCategory(branchId, branchProductCategoryCreateRequest);
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
+                HttpStatus.CREATED
+        );
+    }
+
+    @Operation(summary = "Create a branch product category")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "CREATED",
+                    content = {@Content(schema = @Schema(implementation = ResponseDTO.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            )
+    })
+    @PostMapping("/{branchId}/product")
+    public ResponseEntity<?> createBranchProduct(
+            @PathVariable("branchId") Long branchId,
+            @RequestBody BranchDTO.BranchProductCreateRequest branchProductCreateRequest
+    ) {
+        branchService.createBranchProduct(branchId, branchProductCreateRequest);
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
+                HttpStatus.CREATED
+        );
+    }
 }
