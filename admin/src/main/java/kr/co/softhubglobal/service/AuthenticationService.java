@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
 import kr.co.softhubglobal.entity.center.CenterManager;
+import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
@@ -45,6 +46,7 @@ public class AuthenticationService {
                 )
         );
         User user = (User) authentication.getPrincipal();
+        CenterType centerType = null;
 
 //        if(user.getRole().equals(Role.MEMBER)) {
 //            throw new BadCredentialsException("Bad credentials");
@@ -58,6 +60,7 @@ public class AuthenticationService {
                 case WITHDREW -> throw new RequestNotAcceptableException("This account has already withdrawn");
                 case APPROVAL_PENDING -> throw new RequestNotAcceptableException("This account is waiting approve");
             }
+            centerType = centerManager.getCenter().getCenterType();
         }
 
         String token = tokenProvider.generate(user.getUsername());
@@ -68,7 +71,8 @@ public class AuthenticationService {
         return new AuthenticationDTO.AuthenticationResponse(
                 token,
                 LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault()),
-                "ROLE_" + user.getRole().toString()
+                "ROLE_" + user.getRole().toString(),
+                centerType
         );
     }
 }

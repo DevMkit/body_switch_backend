@@ -72,9 +72,11 @@ public class CenterManagerService {
         }
 
         String stringValueUserId = null;
+        CenterManagerStatus centerManagerStatus = CenterManagerStatus.APPROVAL_PENDING;
 
         if(userId != null) {
             stringValueUserId = String.valueOf(userId);
+            centerManagerStatus = CenterManagerStatus.APPROVED;
             if(centerManagerCreateRequest.getHeadCenterId() == null) {
                 throw new RequestValidationException(
                         messageSource.getMessage("head.center.id.null", null, Locale.ENGLISH));
@@ -121,7 +123,7 @@ public class CenterManagerService {
                                 .updatedId(stringValueUserId)
                                 .build()
                         )
-                        .status(CenterManagerStatus.APPROVED)
+                        .status(centerManagerStatus)
                         .registeredId(stringValueUserId)
                         .updatedId(stringValueUserId)
                         .build()
