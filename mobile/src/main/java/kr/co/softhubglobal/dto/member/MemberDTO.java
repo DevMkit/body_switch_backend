@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.transform.sax.SAXResult;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -50,6 +49,20 @@ public class MemberDTO {
         private String email;
 
         private MultipartFile profileImage;
+        private String postalCode;
+        private String address;
+        private String addressDetail;
+    }
+
+    @Data
+    public static class MemberUpdateRequest {
+
+        private MultipartFile profileImage;
+        private String password;
+        private String phoneNumber;
+        private Gender gender;
+        @Email(message = "member.email.invalid.pattern")
+        private String email;
         private String postalCode;
         private String address;
         private String addressDetail;

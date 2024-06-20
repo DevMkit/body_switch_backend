@@ -1,6 +1,5 @@
 package kr.co.softhubglobal.controller.user;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +15,10 @@ import kr.co.softhubglobal.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -158,6 +157,31 @@ public class MemberController {
         memberService.cancelReservationById(memberReservationCancelRequest);
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.canceled", null, Locale.ENGLISH)),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Update a member record")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(schema = @Schema(implementation = ResponseDTO.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseDTO> updateMember(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @ModelAttribute MemberDTO.MemberUpdateRequest memberUpdateRequest
+    ) {
+        memberService.updateMember(((User) userDetails).getId(), memberUpdateRequest);
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.update", null, Locale.ENGLISH)),
                 HttpStatus.OK
         );
     }

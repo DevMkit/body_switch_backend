@@ -36,6 +36,7 @@ public class MemberService {
     private final MemberReservationInfoMapper memberReservationInfoMapper;
     private final MemberReservationDetailInfoMapper memberReservationDetailInfoMapper;
     private final ObjectValidator<MemberDTO.MemberCreateRequest> memberCreateRequestObjectValidator;
+    private final ObjectValidator<MemberDTO.MemberUpdateRequest> memberUpdateRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberUsernameCheckRequest> memberUsernameCheckRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberReservationCancelRequest> memberReservationCancelRequestObjectValidator;
     private final MessageSource messageSource;
@@ -150,5 +151,40 @@ public class MemberService {
         memberReservationRepository.save(memberReservation);
         memberCourseTicketRepository.save(memberCourseTicket);
         courseClassTimeMemberRepository.deleteByCourseClassTimeIdAndMemberId(memberReservation.getCourseClassTime().getId(), memberReservation.getMember().getId());
+    }
+
+    public void updateMember(Long userId, MemberDTO.MemberUpdateRequest memberUpdateRequest) {
+        memberUpdateRequestObjectValidator.validate(memberUpdateRequest);
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new DuplicateResourceException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
+
+        if(memberUpdateRequest.getProfileImage() != null) {
+            member.setProfileImage(FileUploader.uploadFile(memberUpdateRequest.getProfileImage()));
+        }
+        if(memberUpdateRequest.getPassword() != null) {
+            member.setProfileImage(passwordEncoder.encode(memberUpdateRequest.getPassword()));
+        }
+        if(memberUpdateRequest.getPhoneNumber() != null) {
+            member.getUser().setPhoneNumber(memberUpdateRequest.getPhoneNumber());
+        }
+        if(memberUpdateRequest.getGender() != null) {
+            member.setGender(memberUpdateRequest.getGender());
+        }
+        if(memberUpdateRequest.getEmail() != null) {
+            member.getUser().setEmail(memberUpdateRequest.getEmail());
+        }
+        if(memberUpdateRequest.getPostalCode() != null) {
+            member.setPostalCode(memberUpdateRequest.getPostalCode());
+        }
+        if(memberUpdateRequest.getAddress() != null) {
+            member.setAddress(memberUpdateRequest.getAddress());
+        }
+        if(memberUpdateRequest.getAddressDetail() != null) {
+            member.setAddressDetail(memberUpdateRequest.getAddressDetail());
+        }
+
+        memberRepository.save(member);
     }
 }
