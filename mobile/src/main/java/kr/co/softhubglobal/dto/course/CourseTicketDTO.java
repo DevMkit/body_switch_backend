@@ -26,6 +26,8 @@ public class CourseTicketDTO {
         private String ticketName;
         private String image;
         private double finalPrice;
+        private Integer usageCount;
+        private Integer usagePeriod;
     }
 
     @Data

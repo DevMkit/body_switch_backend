@@ -16,7 +16,9 @@ public class CourseTicketInfoMapper implements Function<CourseTicket, CourseTick
                 courseTicket.getClassType(),
                 courseTicket.getTicketName(),
                 courseTicket.getCourseTicketImages().stream().findAny().map(CourseTicketImage::getImageUrl).orElse(null),
-                courseTicket.getFinalPrice()
+                courseTicket.getFinalPrice(),
+                courseTicket.getUsageCount(),
+                courseTicket.getUsagePeriod()
         );
     }
 }
