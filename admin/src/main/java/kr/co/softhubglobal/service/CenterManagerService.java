@@ -121,7 +121,7 @@ public class CenterManagerService {
                                 .updatedId(stringValueUserId)
                                 .build()
                         )
-                        .status(CenterManagerStatus.APPROVAL_PENDING)
+                        .status(CenterManagerStatus.APPROVED)
                         .registeredId(stringValueUserId)
                         .updatedId(stringValueUserId)
                         .build()
