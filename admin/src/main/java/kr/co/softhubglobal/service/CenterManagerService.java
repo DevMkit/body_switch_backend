@@ -1,5 +1,6 @@
 package kr.co.softhubglobal.service;
 
+import kr.co.softhubglobal.dto.PageableDTO;
 import kr.co.softhubglobal.dto.center.CenterDTO;
 import kr.co.softhubglobal.dto.center.CenterManagerDetailInfoMapper;
 import kr.co.softhubglobal.dto.center.CenterManagerInfoMapper;
@@ -17,12 +18,15 @@ import kr.co.softhubglobal.repository.UserRepository;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,24 +42,36 @@ public class CenterManagerService {
     private final PasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
 
-    public List<CenterDTO.CenterManagerInfo> getAllCenterManagers(CenterDTO.CenterManagerSearchRequest searchRequest){
+    public PageableDTO.Response getAllCenterManagers(CenterDTO.CenterManagerSearchRequest centerManagerSearchRequest){
+
         Restrictions restrictions = new Restrictions();
-        if(searchRequest.getCenterId() != null) {
-            restrictions.eq("center.id", searchRequest.getCenterId());
+        if(centerManagerSearchRequest.getCenterId() != null) {
+            restrictions.eq("center.id", centerManagerSearchRequest.getCenterId());
         }
-        if(searchRequest.getName() != null) {
-            restrictions.like("user.name", "%" + searchRequest.getName() + "%");
+        if(centerManagerSearchRequest.getName() != null) {
+            restrictions.like("user.name", "%" + centerManagerSearchRequest.getName() + "%");
         }
-        if(searchRequest.getRegisteredDateFrom() != null && searchRequest.getRegisteredDateTo() != null){
-            restrictions.between("registeredDate", searchRequest.getRegisteredDateFrom().atStartOfDay(), searchRequest.getRegisteredDateTo().atTime(23, 59, 59) );
+        if(centerManagerSearchRequest.getRegisteredDateFrom() != null && centerManagerSearchRequest.getRegisteredDateTo() != null){
+            restrictions.between("registeredDate", centerManagerSearchRequest.getRegisteredDateFrom().atStartOfDay(), centerManagerSearchRequest.getRegisteredDateTo().atTime(23, 59, 59) );
         }
-        if(searchRequest.getStatus() != null) {
-            restrictions.eq("status", searchRequest.getStatus());
+        if(centerManagerSearchRequest.getStatus() != null) {
+            restrictions.eq("status", centerManagerSearchRequest.getStatus());
         }
-        return centerManagerRepository.findAll(restrictions.output())
-                .stream()
-                .map(centerManagerInfoMapper)
-                .toList();
+
+        PageRequest pageRequest = PageRequest.of(centerManagerSearchRequest.getPage() - 1, centerManagerSearchRequest.getLimit());
+        Page<CenterManager> result = centerManagerRepository.findAll(restrictions.output(), pageRequest);
+
+        PageableDTO.Response response = new PageableDTO.Response();
+        response.setTotalElements(result.getTotalElements());
+        response.setNumber(result.getNumber() + 1);
+        response.setSize(result.getSize());
+        response.setContent(
+                result.getContent()
+                        .stream()
+                        .map(centerManagerInfoMapper)
+                        .toList()
+        );
+        return response;
     }
 
     public void createCenterManager(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest, Long userId) {
