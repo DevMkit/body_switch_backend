@@ -88,7 +88,7 @@ public class CenterManagerService {
         }
 
         String stringValueUserId = null;
-        CenterManagerStatus centerManagerStatus = CenterManagerStatus.APPROVAL_PENDING;
+        CenterManagerStatus centerManagerStatus = centerManagerCreateRequest.getStatus() != null ?  centerManagerCreateRequest.getStatus() : CenterManagerStatus.APPROVAL_PENDING;
 
         if(userId != null) {
             stringValueUserId = String.valueOf(userId);

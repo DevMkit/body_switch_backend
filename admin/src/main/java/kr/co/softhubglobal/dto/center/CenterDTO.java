@@ -25,6 +25,7 @@ public class CenterDTO {
         private CenterManagerCreateInfo managerInfo;
         private CenterCreateInfo centerInfo;
         private Long headCenterId;
+        private CenterManagerStatus status;
     }
 
     @Data
