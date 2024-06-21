@@ -7,16 +7,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.center.CenterDTO;
+import kr.co.softhubglobal.entity.center.CenterManagerStatus;
+import kr.co.softhubglobal.entity.center.CenterType;
+import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.CenterManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 
 import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -28,6 +34,7 @@ import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEM
 public class CenterManagerController {
 
     private final CenterManagerService centerManagerService;
+    private final MessageSource messageSource;
 
     @Operation(summary = "Retrieve all center manager records")
     @ApiResponses(value = {
@@ -65,6 +72,46 @@ public class CenterManagerController {
         return new ResponseEntity<>(
                 centerManagerService.getCenterManagerById(centerManagerId),
                 HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Create a center manger record")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "CREATED",
+                    content = {@Content(schema = @Schema(implementation = ResponseDTO.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "NOT FOUND",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "NOT ACCEPTABLE",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "CONFLICT",
+                    content = {@Content(schema = @Schema(implementation = ApiError.class))}
+            )
+    })
+    @PostMapping
+    public ResponseEntity<?> createCenterManager(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest
+    ) {
+        centerManagerService.createCenterManager(
+                centerManagerCreateRequest,
+                null,
+                CenterType.HEAD,
+                ((User) userDetails).getId()
+        );
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
+                HttpStatus.CREATED
         );
     }
 }

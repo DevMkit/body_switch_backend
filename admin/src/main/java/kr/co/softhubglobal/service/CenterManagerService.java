@@ -74,8 +74,12 @@ public class CenterManagerService {
         return response;
     }
 
-    public void createCenterManager(CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest, Long userId) {
-
+    public void createCenterManager(
+            CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest,
+            CenterManagerStatus status,
+            CenterType centerType,
+            Long userId
+    ) {
         centerManagerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getManagerInfo());
         centerCreateInfoObjectValidator.validate(centerManagerCreateRequest.getCenterInfo());
 
@@ -88,28 +92,33 @@ public class CenterManagerService {
         }
 
         String stringValueUserId = null;
-        CenterManagerStatus centerManagerStatus = centerManagerCreateRequest.getStatus() != null ?  centerManagerCreateRequest.getStatus() : CenterManagerStatus.APPROVAL_PENDING;
-
-        if(userId != null) {
+        if(centerManagerCreateRequest.getStatus() != null) {
+            status = centerManagerCreateRequest.getStatus();
+        }
+        if(status == null) {
+            throw new RequestNotAcceptableException(
+                    messageSource.getMessage("center.status.not.null", null, Locale.ENGLISH));
+        }
+        if (userId != null) {
             stringValueUserId = String.valueOf(userId);
-            centerManagerStatus = CenterManagerStatus.APPROVED;
-            if(centerManagerCreateRequest.getHeadCenterId() == null) {
-                throw new RequestValidationException(
-                        messageSource.getMessage("head.center.id.null", null, Locale.ENGLISH));
-            }
-            Center center = centerRepository.findById(centerManagerCreateRequest.getHeadCenterId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            messageSource.getMessage("center.id.not.exist", new Object[]{centerManagerCreateRequest.getHeadCenterId()}, Locale.ENGLISH)));
-            if(!center.getCenterType().equals(CenterType.HEAD)) {
-                throw new RequestNotAcceptableException(
-                        messageSource.getMessage("center.not.head.branch", null, Locale.ENGLISH));
-            }
-            if(!Objects.equals(center.getCenterManager().getUser().getId(), userId)) {
-                throw new RequestNotAcceptableException(
-                        messageSource.getMessage("center.manager.not.match", null, Locale.ENGLISH));
+            if (centerType != null && centerType.equals(CenterType.BRANCH)) {
+                if(centerManagerCreateRequest.getHeadCenterId() == null) {
+                    throw new RequestValidationException(
+                            messageSource.getMessage("head.center.id.null", null, Locale.ENGLISH));
+                }
+                Center center = centerRepository.findById(centerManagerCreateRequest.getHeadCenterId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                messageSource.getMessage("center.id.not.exist", new Object[]{centerManagerCreateRequest.getHeadCenterId()}, Locale.ENGLISH)));
+                if(!center.getCenterType().equals(CenterType.HEAD)) {
+                    throw new RequestNotAcceptableException(
+                            messageSource.getMessage("center.not.head.branch", null, Locale.ENGLISH));
+                }
+                if(!Objects.equals(center.getCenterManager().getUser().getId(), userId)) {
+                    throw new RequestNotAcceptableException(
+                            messageSource.getMessage("center.manager.not.match", null, Locale.ENGLISH));
+                }
             }
         }
-
         centerManagerRepository.save(
                 CenterManager.builder()
                         .user(User.builder()
@@ -133,13 +142,13 @@ public class CenterManagerService {
                                 .representativeNumber(centerManagerCreateRequest.getCenterInfo().getRepresentativeNumber())
                                 .email(centerManagerCreateRequest.getCenterInfo().getEmail())
                                 .homepage(centerManagerCreateRequest.getCenterInfo().getHomepage())
-                                .centerType(centerManagerCreateRequest.getHeadCenterId() != null ? CenterType.BRANCH : CenterType.HEAD)
-                                .headCenterId(centerManagerCreateRequest.getHeadCenterId() != null ? centerManagerCreateRequest.getHeadCenterId() : null)
+                                .centerType(centerType)
+                                .headCenterId(centerManagerCreateRequest.getHeadCenterId())
                                 .registeredId(stringValueUserId)
                                 .updatedId(stringValueUserId)
                                 .build()
                         )
-                        .status(centerManagerStatus)
+                        .status(status)
                         .registeredId(stringValueUserId)
                         .updatedId(stringValueUserId)
                         .build()

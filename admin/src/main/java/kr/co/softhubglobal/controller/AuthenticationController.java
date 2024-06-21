@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.AuthenticationDTO;
 import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.center.CenterDTO;
+import kr.co.softhubglobal.entity.center.CenterManagerStatus;
+import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.AuthenticationService;
 import kr.co.softhubglobal.service.CenterManagerService;
@@ -76,7 +78,12 @@ public class AuthenticationController {
     public ResponseEntity<?> createCenterManager(
             @RequestBody CenterDTO.CenterManagerCreateRequest centerManagerCreateRequest
     ) {
-        centerManagerService.createCenterManager(centerManagerCreateRequest, null);
+        centerManagerService.createCenterManager(
+                centerManagerCreateRequest,
+                CenterManagerStatus.APPROVAL_PENDING,
+                CenterType.HEAD,
+                null
+        );
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
