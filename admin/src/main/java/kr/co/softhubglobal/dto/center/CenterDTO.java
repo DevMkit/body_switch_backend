@@ -40,6 +40,14 @@ public class CenterDTO {
     }
 
     @Data
+    public static class CenterManagerUpdateRequest {
+
+        private CenterManagerUpdateInfo managerInfo;
+        private CenterUpdateInfo centerInfo;
+        private CenterManagerStatus status;
+    }
+
+    @Data
     @EqualsAndHashCode(callSuper = false)
     public static class CenterSearchRequest extends PageableDTO.Request {
 
@@ -110,6 +118,34 @@ public class CenterDTO {
         @Email(message = "center.email.invalid.pattern")
         private String email;
 
+        private String homepage;
+    }
+
+    @Data
+    public static class CenterManagerUpdateInfo {
+
+        private String name;
+        private String password;
+        private String phoneNumber;
+        @Email(message = "center.manager.email.invalid.pattern")
+        private String email;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CenterUpdateInfo {
+
+        private String businessName;
+        private String businessNumber;
+        private BusinessClassification businessClassification;
+        private String businessType;
+        private String postalCode;
+        private String city;
+        private String address;
+        private String addressDetail;
+        private String representativeNumber;
+        @Email(message = "center.email.invalid.pattern")
+        private String email;
         private String homepage;
     }
 

@@ -15,9 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -88,7 +85,7 @@ public class BranchController {
             )
     })
     @PutMapping("{branchId}")
-    public ResponseEntity<ResponseDTO> updateMemberById(
+    public ResponseEntity<ResponseDTO> updateBranchById(
             @PathVariable("branchId") Long branchId,
             @RequestBody BranchDTO.BranchUpdateRequest branchUpdateRequest
     ) {

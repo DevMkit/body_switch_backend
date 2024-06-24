@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.center.CenterDTO;
-import kr.co.softhubglobal.entity.center.CenterManagerStatus;
 import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.ApiError;
@@ -66,11 +65,11 @@ public class CenterManagerController {
             )
     })
     @GetMapping("{id}")
-    public ResponseEntity<?> getCenterManagerById(
+    public ResponseEntity<?> getCenterManagerDetailInfoById(
             @PathVariable("id") Long centerManagerId
     ) {
         return new ResponseEntity<>(
-                centerManagerService.getCenterManagerById(centerManagerId),
+                centerManagerService.getCenterManagerDetailInfoById(centerManagerId),
                 HttpStatus.OK
         );
     }
@@ -112,6 +111,32 @@ public class CenterManagerController {
         return new ResponseEntity<>(
                 new ResponseDTO(messageSource.getMessage("success.create",  null, Locale.ENGLISH)),
                 HttpStatus.CREATED
+        );
+    }
+
+    @Operation(summary = "Update center manager record by its id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(schema = @Schema(implementation = ResponseDTO.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @PutMapping("{id}")
+    public ResponseEntity<ResponseDTO> updateCenterManagerById(
+            @PathVariable("id") Long centerManagerId,
+            @RequestBody CenterDTO.CenterManagerUpdateRequest centerManagerUpdateRequest,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        centerManagerService.updateCenterManagerById(centerManagerId, centerManagerUpdateRequest, ((User) userDetails).getId());
+        return new ResponseEntity<>(
+                new ResponseDTO(messageSource.getMessage("success.update", null, Locale.ENGLISH)),
+                HttpStatus.OK
         );
     }
 }

@@ -101,11 +101,11 @@ public class CenterController {
             )
     })
     @GetMapping("{id}")
-    public ResponseEntity<?> getCenterDetailInfo(
+    public ResponseEntity<?> getCenterDetailInfoById(
             @PathVariable("id") Long centerId
     ) {
         return new ResponseEntity<>(
-                centerService.getCenterDetailInfo(centerId),
+                centerService.getCenterDetailInfoById(centerId),
                 HttpStatus.OK
         );
     }

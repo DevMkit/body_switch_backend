@@ -20,13 +20,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,8 @@ public class CenterManagerService {
     private final CenterManagerDetailInfoMapper centerManagerDetailInfoMapper;
     private final ObjectValidator<CenterDTO.CenterManagerCreateInfo> centerManagerCreateInfoObjectValidator;
     private final ObjectValidator<CenterDTO.CenterCreateInfo> centerCreateInfoObjectValidator;
+    private final ObjectValidator<CenterDTO.CenterManagerUpdateInfo> centerManagerUpdateInfoObjectValidator;
+    private final ObjectValidator<CenterDTO.CenterUpdateInfo> centerUpdateInfoObjectValidator;
     private final PasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
 
@@ -58,8 +61,15 @@ public class CenterManagerService {
             restrictions.eq("status", centerManagerSearchRequest.getStatus());
         }
 
-        PageRequest pageRequest = PageRequest.of(centerManagerSearchRequest.getPage() - 1, centerManagerSearchRequest.getLimit());
-        Page<CenterManager> result = centerManagerRepository.findAll(restrictions.output(), pageRequest);
+        PageRequest pageRequest = PageRequest.of(
+                centerManagerSearchRequest.getPage() - 1,
+                centerManagerSearchRequest.getLimit(),
+                Sort.by("registeredDate").descending()
+        );
+        Page<CenterManager> result = centerManagerRepository.findAll(
+                restrictions.output(),
+                pageRequest
+        );
 
         PageableDTO.Response response = new PageableDTO.Response();
         response.setTotalElements(result.getTotalElements());
@@ -155,10 +165,79 @@ public class CenterManagerService {
         );
     }
 
-    public CenterDTO.CenterManagerDetailInfo getCenterManagerById(Long centerManagerId) {
+    public CenterDTO.CenterManagerDetailInfo getCenterManagerDetailInfoById(Long centerManagerId) {
         return centerManagerRepository.findById(centerManagerId)
                 .map(centerManagerDetailInfoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("center.manager.id.not.exist", new Object[]{centerManagerId}, Locale.ENGLISH)));
+    }
+
+    @Transactional
+    public void updateCenterManagerById(
+            Long centerManagerId,
+            CenterDTO.CenterManagerUpdateRequest centerManagerUpdateRequest,
+            Long userId
+    ) {
+        centerManagerUpdateInfoObjectValidator.validate(centerManagerUpdateRequest.getManagerInfo());
+        centerUpdateInfoObjectValidator.validate(centerManagerUpdateRequest.getCenterInfo());
+
+        CenterManager centerManager = centerManagerRepository.findById(centerManagerId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("center.manager.id.not.exist", new Object[]{centerManagerId}, Locale.ENGLISH)));
+
+        if(centerManagerUpdateRequest.getManagerInfo() != null) {
+            if(centerManagerUpdateRequest.getManagerInfo().getName() != null) {
+                centerManager.getUser().setName(centerManagerUpdateRequest.getManagerInfo().getName());
+            }
+            if(centerManagerUpdateRequest.getManagerInfo().getPassword() != null) {
+                centerManager.getUser().setPassword(passwordEncoder.encode(centerManagerUpdateRequest.getManagerInfo().getPassword()));
+            }
+            if(centerManagerUpdateRequest.getManagerInfo().getPhoneNumber() != null) {
+                centerManager.getUser().setPhoneNumber(centerManagerUpdateRequest.getManagerInfo().getPhoneNumber());
+            }
+            if(centerManagerUpdateRequest.getManagerInfo().getEmail() != null) {
+                centerManager.getUser().setEmail(centerManagerUpdateRequest.getManagerInfo().getEmail());
+            }
+        }
+        if(centerManagerUpdateRequest.getCenterInfo() != null) {
+            if(centerManagerUpdateRequest.getCenterInfo().getBusinessName() != null) {
+                centerManager.getCenter().setBusinessName(centerManagerUpdateRequest.getCenterInfo().getBusinessName());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getBusinessNumber() != null) {
+                centerManager.getCenter().setBusinessNumber(centerManagerUpdateRequest.getCenterInfo().getBusinessNumber());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getBusinessClassification() != null) {
+                centerManager.getCenter().setBusinessClassification(centerManagerUpdateRequest.getCenterInfo().getBusinessClassification());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getBusinessType() != null) {
+                centerManager.getCenter().setBusinessType(centerManagerUpdateRequest.getCenterInfo().getBusinessType());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getPostalCode() != null) {
+                centerManager.getCenter().setPostalCode(centerManagerUpdateRequest.getCenterInfo().getPostalCode());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getCity() != null) {
+                centerManager.getCenter().setCity(centerManagerUpdateRequest.getCenterInfo().getCity());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getAddress() != null) {
+                centerManager.getCenter().setAddress(centerManagerUpdateRequest.getCenterInfo().getAddress());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getAddressDetail() != null) {
+                centerManager.getCenter().setAddressDetail(centerManagerUpdateRequest.getCenterInfo().getAddressDetail());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getRepresentativeNumber() != null) {
+                centerManager.getCenter().setRepresentativeNumber(centerManagerUpdateRequest.getCenterInfo().getRepresentativeNumber());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getEmail() != null) {
+                centerManager.getCenter().setEmail(centerManagerUpdateRequest.getCenterInfo().getEmail());
+            }
+            if(centerManagerUpdateRequest.getCenterInfo().getHomepage() != null) {
+                centerManager.getCenter().setHomepage(centerManagerUpdateRequest.getCenterInfo().getHomepage());
+            }
+        }
+        if(centerManagerUpdateRequest.getStatus() != null) {
+           centerManager.setStatus(centerManagerUpdateRequest.getStatus());
+        }
+        centerManager.setUpdatedId(String.valueOf(userId));
+        centerManagerRepository.save(centerManager);
     }
 }

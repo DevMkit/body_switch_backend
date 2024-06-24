@@ -84,7 +84,7 @@ public class CenterService {
         return response;
     }
 
-    public CenterDTO.CenterDetailInfo getCenterDetailInfo(Long centerId) {
+    public CenterDTO.CenterDetailInfo getCenterDetailInfoById(Long centerId) {
         return centerRepository.findById(centerId)
                 .map(centerDetailInfoMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
