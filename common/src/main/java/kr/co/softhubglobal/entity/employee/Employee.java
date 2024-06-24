@@ -57,7 +57,7 @@ public class Employee extends BaseEntity {
     @Column(name = "LEFT_DATE")
     private LocalDate leftDate;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<EmployeeResponsibility> responsibilities;
 }

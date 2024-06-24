@@ -2,6 +2,7 @@ package kr.co.softhubglobal.entity.employee;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import kr.co.softhubglobal.entity.center.BusinessClassification;
 import kr.co.softhubglobal.entity.common.BaseDateEntity;
 import lombok.*;
 
@@ -25,5 +26,6 @@ public class EmployeeResponsibility extends BaseDateEntity {
     private Employee employee;
 
     @Column(name = "NAME")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private Responsibilities name;
 }
