@@ -12,12 +12,13 @@ public class EmployeeInfoMapper implements Function<Employee, EmployeeDTO.Employ
     @Override
     public EmployeeDTO.EmployeeInfo apply(Employee employee) {
         return new EmployeeDTO.EmployeeInfo(
+                employee.getId(),
                 employee.getUser().getName(),
                 employee.getGender().toString(),
                 employee.getUser().getPhoneNumber(),
                 employee.getResponsibilities().stream().map(EmployeeResponsibility::getName).toList(),
                 employee.getHiredDate(),
-                employee.getEmployeeClassification().toString()
+                employee.getEmployeeClassification()
         );
     }
 }
