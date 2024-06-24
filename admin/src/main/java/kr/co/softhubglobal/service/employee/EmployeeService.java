@@ -46,7 +46,8 @@ public class EmployeeService {
     public PageableDTO.Response getAllEmployees(EmployeeDTO.EmployeeSearchRequest employeeSearchRequest) {
 
         Specification<Employee> specification = Specification
-                .where(EmployeeSpecifications.employeeNameLike(employeeSearchRequest.getName()))
+                .where(EmployeeSpecifications.employeeBranchIdEqual(employeeSearchRequest.getBranchId()))
+                .and(EmployeeSpecifications.employeeNameLike(employeeSearchRequest.getName()))
                 .and(EmployeeSpecifications.responsibilitiesIn(employeeSearchRequest.getResponsibilities()))
                 .and(EmployeeSpecifications.classificationIn(employeeSearchRequest.getClassifications()));
 

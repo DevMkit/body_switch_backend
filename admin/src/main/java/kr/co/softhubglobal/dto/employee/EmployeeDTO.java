@@ -94,7 +94,7 @@ public class EmployeeDTO {
     @EqualsAndHashCode(callSuper = false)
     public static class EmployeeSearchRequest extends PageableDTO.Request {
 
-        private Long centerId;
+        private Long branchId;
         private String name;
         private List<Responsibilities> responsibilities;
         private List<EmployeeClassification> classifications;
