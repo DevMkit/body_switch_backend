@@ -66,4 +66,40 @@ public class SearchOptionController {
                 HttpStatus.OK
         );
     }
+
+    @Operation(summary = "Retrieve course ticket selection options")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketInfo.class)) }
+            )
+    })
+    @GetMapping("course-tickets")
+    public ResponseEntity<?> getCourseTicketSelectionOptions(
+            Long branchId
+    ) {
+        return new ResponseEntity<>(
+                searchOptionService.getCourseTicketSelectionOptions(branchId),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Retrieve course ticket selection options")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketTrainerInfo.class)) }
+            )
+    })
+    @GetMapping("course-trainers")
+    public ResponseEntity<?> getCourseTicketTrainerSelectionOptions(
+            Long courseTicketId
+    ) {
+        return new ResponseEntity<>(
+                searchOptionService.getCourseTicketTrainerSelectionOptions(courseTicketId),
+                HttpStatus.OK
+        );
+    }
 }
