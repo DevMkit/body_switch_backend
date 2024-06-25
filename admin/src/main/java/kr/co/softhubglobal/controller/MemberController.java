@@ -8,12 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.member.MemberDTO;
-import kr.co.softhubglobal.service.MemberService;
+import kr.co.softhubglobal.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -35,9 +34,9 @@ public class MemberController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getAllMembers() {
+    public ResponseEntity<?> getAllMembers(MemberDTO.MemberSearchRequest memberSearchRequest) {
         return new ResponseEntity<>(
-                memberService.getAllMembers(),
+                memberService.getAllMembers(memberSearchRequest),
                 HttpStatus.OK
         );
     }
