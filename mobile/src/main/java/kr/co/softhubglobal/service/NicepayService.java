@@ -140,6 +140,7 @@ public class NicepayService {
                                     .member(memberOrder.getMember())
                                     .courseTicket(memberOrder.getCourseTicket())
                                     .startDate(memberOrder.getCourseStartDate())
+                                    .expireDate(memberOrder.getCourseStartDate().plusMonths(memberOrder.getCourseTicket().getUsagePeriod()))
                                     .usedCount(0)
                                     .status(MemberCourseTicketStatus.ACTIVE)
                                     .build()
