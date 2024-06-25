@@ -35,6 +35,9 @@ public class MemberCourseTicket extends BaseDateEntity {
     @Column(name = "START_DATE")
     private LocalDate startDate;
 
+    @Column(name = "EXPIRE_DATE")
+    private LocalDate expireDate;
+
     @Column(name = "USED_COUNT")
     private Integer usedCount;
 
