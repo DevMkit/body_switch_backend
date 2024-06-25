@@ -103,7 +103,7 @@ public class EmployeeService {
                 .stream()
                 .map(responsibility -> EmployeeResponsibility.builder()
                         .employee(employee)
-                        .name(Responsibilities.valueOf(responsibility))
+                        .name(responsibility)
                         .build()
                 )
                 .toList()
@@ -163,7 +163,7 @@ public class EmployeeService {
                             .stream()
                             .map(responsibility -> EmployeeResponsibility.builder()
                                     .employee(employee)
-                                    .name(Responsibilities.valueOf(responsibility))
+                                    .name(responsibility)
                                     .build())
                             .toList()
             );

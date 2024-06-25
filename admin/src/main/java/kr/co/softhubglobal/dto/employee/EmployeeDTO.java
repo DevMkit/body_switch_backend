@@ -56,7 +56,7 @@ public class EmployeeDTO {
 
         private String introduction;
 
-        private List<String> responsibilities;
+        private List<Responsibilities> responsibilities;
 
         @NotNull(message = "employee.classification.not.null")
         private EmployeeClassification employeeClassification;
@@ -82,7 +82,7 @@ public class EmployeeDTO {
         private String email;
         private Gender gender;
         private String introduction;
-        private List<String> responsibilities;
+        private List<Responsibilities> responsibilities;
         private EmployeeClassification employeeClassification;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate hiredDate;

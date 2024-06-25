@@ -14,6 +14,7 @@ import kr.co.softhubglobal.entity.member.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,13 +62,58 @@ public class MemberDTO {
     @EqualsAndHashCode(callSuper = false)
     public static class MemberSearchRequest extends PageableDTO.Request {
 
+        private Long headBranchId;
         private Long branchId;
         private String searchInput;
+        private List<MemberType> memberTypes;
         private List<CourseClassType> classTypes;
         private Long courseTicketId;
         private Long courseTrainerId;
         private List<Gender> genders;
+        private List<AgeRange> ageRanges;
+        private Boolean isSMSReceive;
+        private List<RemainingCount> remainingCounts;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate ticketExpireDateFrom;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate ticketExpireDateTo;
     }
+
+    public enum MemberType {
+        ACTIVE, STOPPED, EXPIRED, WITHDREW
+    }
+
+    @Getter
+    public enum AgeRange {
+        UNDER_20(0, 19),
+        AGE_20_30(20, 30),
+        AGE_40_50(40, 50),
+        AGE_50_60(50, 60),
+        OVER_60(60, Integer.MAX_VALUE);
+
+        private final int min;
+        private final int max;
+
+        AgeRange(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
+    }
+
+    @Getter
+    public enum RemainingCount {
+
+        UNDER_3(3),
+        UNDER_5(5),
+        UNDER_10(10);
+
+        private final int value;
+
+        RemainingCount(int value) {
+            this.value = value;
+        }
+    }
+
 
     @Data
     @AllArgsConstructor

@@ -24,11 +24,16 @@ public class MemberService {
 
         Specification<Member> specification = Specification
                 .where(MemberSpecifications.memberCourseTicketBranchIdEqual(memberSearchRequest.getBranchId()))
+                .and(MemberSpecifications.memberTypesEqual(memberSearchRequest.getMemberTypes()))
                 .and(MemberSpecifications.memberNameOrUsernameOrPhoneNumberLike(memberSearchRequest.getSearchInput()))
                 .and(MemberSpecifications.memberCourseTicketTypeIn(memberSearchRequest.getClassTypes()))
                 .and(MemberSpecifications.memberCourseTicketIdEqual(memberSearchRequest.getCourseTicketId()))
                 .and(MemberSpecifications.memberCourseTicketTrainerIdEqual(memberSearchRequest.getCourseTrainerId()))
-                .and(MemberSpecifications.memberGenderIn(memberSearchRequest.getGenders()));
+                .and(MemberSpecifications.memberGenderIn(memberSearchRequest.getGenders()))
+                .and(MemberSpecifications.memberAgeInRanges(memberSearchRequest.getAgeRanges()))
+                .and(MemberSpecifications.memberIsSmsReceive(memberSearchRequest.getIsSMSReceive()))
+                .and(MemberSpecifications.memberCourseTicketRemainingCount(memberSearchRequest.getRemainingCounts()))
+                .and(MemberSpecifications.memberCourseTicketExpireDateBetween(memberSearchRequest.getTicketExpireDateFrom(), memberSearchRequest.getTicketExpireDateTo()));
 
         PageRequest pageRequest = PageRequest.of(
                 memberSearchRequest.getPage() - 1,
