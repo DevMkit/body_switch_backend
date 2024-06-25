@@ -130,7 +130,7 @@ public class EmployeeController {
     @PutMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDTO> updateEmployeeById(
             @PathVariable("id") Long employeeId,
-            @RequestBody EmployeeDTO.EmployeeUpdateRequest employeeUpdateRequest
+            @ModelAttribute EmployeeDTO.EmployeeUpdateRequest employeeUpdateRequest
     ) {
         employeeService.updateEmployeeById(employeeId, employeeUpdateRequest);
         return new ResponseEntity<>(

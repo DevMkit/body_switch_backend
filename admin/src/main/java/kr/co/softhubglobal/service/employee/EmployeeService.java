@@ -8,6 +8,7 @@ import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.branch.BranchWorkHours;
 import kr.co.softhubglobal.entity.employee.Employee;
 import kr.co.softhubglobal.entity.employee.EmployeeResponsibility;
+import kr.co.softhubglobal.entity.employee.Responsibilities;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
@@ -102,7 +103,7 @@ public class EmployeeService {
                 .stream()
                 .map(responsibility -> EmployeeResponsibility.builder()
                         .employee(employee)
-                        .name(responsibility)
+                        .name(Responsibilities.valueOf(responsibility))
                         .build()
                 )
                 .toList()
@@ -162,7 +163,7 @@ public class EmployeeService {
                             .stream()
                             .map(responsibility -> EmployeeResponsibility.builder()
                                     .employee(employee)
-                                    .name(responsibility)
+                                    .name(Responsibilities.valueOf(responsibility))
                                     .build())
                             .toList()
             );
