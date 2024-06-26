@@ -98,7 +98,7 @@ public class EmployeeService {
         employee.setBirthDate(employeeCreateRequest.getBirthDate());
         employee.setGender(employeeCreateRequest.getGender());
         employee.setBranch(branch);
-        employee.setIntroduction(employee.getIntroduction());
+        employee.setIntroduction(employeeCreateRequest.getIntroduction());
         employee.setResponsibilities(employeeCreateRequest.getResponsibilities()
                 .stream()
                 .map(responsibility -> EmployeeResponsibility.builder()
