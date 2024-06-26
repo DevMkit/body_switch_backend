@@ -3,10 +3,8 @@ package kr.co.softhubglobal.service.member;
 import kr.co.softhubglobal.dto.PageableDTO;
 import kr.co.softhubglobal.dto.member.MemberDTO;
 import kr.co.softhubglobal.dto.member.MemberInfoMapper;
-import kr.co.softhubglobal.entity.employee.Employee;
 import kr.co.softhubglobal.entity.member.Member;
 import kr.co.softhubglobal.repository.MemberRepository;
-import kr.co.softhubglobal.service.employee.EmployeeSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +21,8 @@ public class MemberService {
     public PageableDTO.Response getAllMembers(MemberDTO.MemberSearchRequest memberSearchRequest) {
 
         Specification<Member> specification = Specification
-                .where(MemberSpecifications.memberCourseTicketBranchIdEqual(memberSearchRequest.getBranchId()))
+                .where(MemberSpecifications.memberCourseTicketBranchCenterIdOrHeadCenterIdEqual(memberSearchRequest.getHeadBranchId()))
+                .and(MemberSpecifications.memberCourseTicketBranchIdEqual(memberSearchRequest.getBranchId()))
                 .and(MemberSpecifications.memberTypesEqual(memberSearchRequest.getMemberTypes()))
                 .and(MemberSpecifications.memberNameOrUsernameOrPhoneNumberLike(memberSearchRequest.getSearchInput()))
                 .and(MemberSpecifications.memberCourseTicketTypeIn(memberSearchRequest.getClassTypes()))

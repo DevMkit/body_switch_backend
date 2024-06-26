@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MemberSpecifications {
 
-    public static Specification<Member> memberCourseTicketBranchCenterIdOrCourseTicketBranchCenterHeadCenterIdEqual(Long headCenterId) {
+    public static Specification<Member> memberCourseTicketBranchCenterIdOrHeadCenterIdEqual(Long headCenterId) {
         return (root, query, cb) -> {
             if (headCenterId == null) {
                 return cb.conjunction();

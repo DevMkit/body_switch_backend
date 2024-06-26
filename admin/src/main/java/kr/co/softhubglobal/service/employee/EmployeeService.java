@@ -94,7 +94,9 @@ public class EmployeeService {
                 .role(Role.EMPLOYEE)
                 .build()
         );
-        employee.setProfileImage(FileUploader.uploadFile(employeeCreateRequest.getProfileImage()));
+        if(employeeCreateRequest.getProfileImage() != null) {
+            employee.setProfileImage(FileUploader.uploadFile(employeeCreateRequest.getProfileImage()));
+        }
         employee.setBirthDate(employeeCreateRequest.getBirthDate());
         employee.setGender(employeeCreateRequest.getGender());
         employee.setBranch(branch);
