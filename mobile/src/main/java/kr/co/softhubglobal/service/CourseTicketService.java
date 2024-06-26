@@ -6,7 +6,6 @@ import kr.co.softhubglobal.dto.course.CourseTicketInfoMapper;
 import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.course.SaleStatus;
 import kr.co.softhubglobal.entity.member.Member;
-import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.CourseTicketRepository;
 import kr.co.softhubglobal.repository.MemberRepository;
@@ -32,7 +31,7 @@ public class CourseTicketService {
             CourseTicketDTO.CourseTicketSearchRequest courseTicketSearchRequest
     ) {
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
 
         Restrictions restrictions = new Restrictions();

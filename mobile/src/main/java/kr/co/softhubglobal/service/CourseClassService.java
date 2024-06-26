@@ -8,7 +8,6 @@ import kr.co.softhubglobal.entity.member.Member;
 import kr.co.softhubglobal.entity.member.MemberCourseTicket;
 import kr.co.softhubglobal.entity.member.MemberReservation;
 import kr.co.softhubglobal.entity.member.ReservationStatus;
-import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.*;
@@ -40,7 +39,7 @@ public class CourseClassService {
             CourseClassDTO.CourseClassSearchRequest courseClassSearchRequest
     ) {
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
 
         Restrictions restrictions = new Restrictions();
@@ -71,7 +70,7 @@ public class CourseClassService {
 
     public CourseClassDTO.CourseClassTimeDetailInfo getCourseTicketDetailInfoById(Long userId, Long courseClassTimeId) {
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
 
         return courseClassTimeRepository.findById(courseClassTimeId)
@@ -94,7 +93,7 @@ public class CourseClassService {
         courseClassTimeReserveRequestObjectValidator.validate(courseClassTimeReserveRequest);
 
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
 
         CourseClassTime courseClassTime = courseClassTimeRepository.findById(courseClassTimeReserveRequest.getCourseClassTimeId())

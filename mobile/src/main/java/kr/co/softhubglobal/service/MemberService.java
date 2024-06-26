@@ -45,14 +45,14 @@ public class MemberService {
     public MemberDTO.MemberInfo getMemberInfo(Long userId) {
         return memberRepository.findByUserId(userId)
                 .map(memberInfoMapper)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
     }
 
     public MemberDTO.MemberDetailInfo getMemberDetailInfoById(Long userId) {
         return memberRepository.findByUserId(userId)
                 .map(memberDetailInfoMapper)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
     }
 
@@ -99,7 +99,7 @@ public class MemberService {
     public MemberDTO.MemberUsageInfo getMemberUsageInformation(Long userId) {
         return memberRepository.findByUserId(userId)
                 .map(memberUsageInfoMapper)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
     }
 
@@ -157,7 +157,7 @@ public class MemberService {
         memberUpdateRequestObjectValidator.validate(memberUpdateRequest);
 
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new DuplicateResourceException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
 
         if(memberUpdateRequest.getProfileImage() != null) {
