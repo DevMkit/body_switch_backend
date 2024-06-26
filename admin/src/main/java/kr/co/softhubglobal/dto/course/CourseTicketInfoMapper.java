@@ -11,14 +11,15 @@ public class CourseTicketInfoMapper implements Function<CourseTicket, CourseTick
     @Override
     public CourseTicketDTO.CourseTicketInfo apply(CourseTicket courseTicket) {
         return new CourseTicketDTO.CourseTicketInfo(
+                courseTicket.getId(),
                 courseTicket.getBranch().getBranchName(),
-                courseTicket.getClassType().toString(),
+                courseTicket.getClassType(),
                 courseTicket.getTicketName(),
                 courseTicket.getUsagePeriod(),
                 courseTicket.getUsageCount(),
                 courseTicket.getFinalPrice(),
                 0,
-                courseTicket.getSaleStatus().toString()
+                courseTicket.getSaleStatus()
         );
     }
 }

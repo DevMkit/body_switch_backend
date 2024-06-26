@@ -10,10 +10,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.softhubglobal.dto.ResponseDTO;
 import kr.co.softhubglobal.dto.course.CourseTicketDTO;
 import kr.co.softhubglobal.exception.ApiError;
-import kr.co.softhubglobal.service.CourseTicketService;
+import kr.co.softhubglobal.service.courseTicket.CourseTicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +41,9 @@ public class CourseTicketController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getAllCourseTickets() {
+    public ResponseEntity<?> getAllCourseTickets(CourseTicketDTO.CourseTicketSearchRequest courseTicketSearchRequest) {
         return new ResponseEntity<>(
-                courseTicketService.getAllCourseTickets(),
+                courseTicketService.getAllCourseTickets(courseTicketSearchRequest),
                 HttpStatus.OK
         );
     }
@@ -70,9 +71,9 @@ public class CourseTicketController {
                     content = {@Content(schema = @Schema(implementation = ApiError.class))}
             )
     })
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createCourseTicket(
-            @RequestBody CourseTicketDTO.CourseTicketCreateRequest courseTicketCreateRequest
+            @ModelAttribute CourseTicketDTO.CourseTicketCreateRequest courseTicketCreateRequest
     ) {
         courseTicketService.createCourseTicket(courseTicketCreateRequest);
         return new ResponseEntity<>(

@@ -3,9 +3,15 @@ package kr.co.softhubglobal.dto.course;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import kr.co.softhubglobal.dto.PageableDTO;
+import kr.co.softhubglobal.dto.member.MemberDTO;
 import kr.co.softhubglobal.entity.course.CourseClassType;
+import kr.co.softhubglobal.entity.course.SaleStatus;
+import kr.co.softhubglobal.entity.member.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,11 +54,8 @@ public class CourseTicketDTO {
         private Integer usageCount;
 
         private List<Long> trainers;
-
-        private List<String> images;
-
+        private List<MultipartFile> images;
         private List<CourseTicketCurriculumCreateInfo> curriculums;
-
         private String classDetail;
     }
 
@@ -64,20 +67,33 @@ public class CourseTicketDTO {
         private String title;
 
         private String summary;
-        private String image;
+
+        private MultipartFile image;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class CourseTicketSearchRequest extends PageableDTO.Request {
+
+        private Long headBranchId;
+        private Long branchId;
+        private String ticketName;
+        private List<CourseClassType> classTypes;
+        private List<SaleStatus> saleStatuses;
     }
 
     @Data
     @AllArgsConstructor
     public static class CourseTicketInfo {
 
+        private Long id;
         private String branchName;
-        private String classType;
+        private CourseClassType classType;
         private String ticketName;
         private int usagePeriod;
         private int usageCount;
         private double finalPrice;
         private int wishListAddedCount;
-        private String saleStatus;
+        private SaleStatus saleStatus;
     }
 }
