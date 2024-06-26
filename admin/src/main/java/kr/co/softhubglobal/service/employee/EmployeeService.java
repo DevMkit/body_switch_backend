@@ -4,18 +4,16 @@ import kr.co.softhubglobal.dto.PageableDTO;
 import kr.co.softhubglobal.dto.employee.EmployeeDTO;
 import kr.co.softhubglobal.dto.employee.EmployeeDetailInfoMapper;
 import kr.co.softhubglobal.dto.employee.EmployeeInfoMapper;
+import kr.co.softhubglobal.dto.member.MemberInfoMapper;
 import kr.co.softhubglobal.entity.branch.Branch;
-import kr.co.softhubglobal.entity.branch.BranchWorkHours;
+import kr.co.softhubglobal.entity.course.CourseClassTimeMember;
 import kr.co.softhubglobal.entity.employee.Employee;
 import kr.co.softhubglobal.entity.employee.EmployeeResponsibility;
-import kr.co.softhubglobal.entity.employee.Responsibilities;
 import kr.co.softhubglobal.entity.user.Role;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
-import kr.co.softhubglobal.repository.BranchRepository;
-import kr.co.softhubglobal.repository.EmployeeRepository;
-import kr.co.softhubglobal.repository.UserRepository;
+import kr.co.softhubglobal.repository.*;
 import kr.co.softhubglobal.utils.FileUploader;
 import kr.co.softhubglobal.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +34,12 @@ public class EmployeeService {
 
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
+    private final CourseClassTimeRepository courseClassTimeRepository;
+    private final CourseClassTimeMemberRepository courseClassTimeMemberRepository;
     private final BranchRepository branchRepository;
     private final EmployeeInfoMapper employeeInfoMapper;
     private final EmployeeDetailInfoMapper employeeDetailInfoMapper;
+    private final MemberInfoMapper memberInfoMapper;
     private final PasswordEncoder passwordEncoder;
     private final MessageSource messageSource;
     private final ObjectValidator<EmployeeDTO.EmployeeCreateRequest> employeeCreateRequestObjectValidator;
@@ -180,5 +181,30 @@ public class EmployeeService {
             employee.setLeftDate(employeeUpdateRequest.getLeftDate());
         }
         employeeRepository.save(employee);
+    }
+
+    public PageableDTO.Response getEmployeeMembersById(PageableDTO.Request pageableRequest, Long employeeId) {
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("employee.id.not.exist", new Object[]{employeeId}, Locale.ENGLISH)));
+
+        PageRequest pageRequest = PageRequest.of(pageableRequest.getPage() - 1, pageableRequest.getLimit());
+
+        Page<CourseClassTimeMember> result = courseClassTimeMemberRepository.findByCourseClassTimeCourseClassEmployee(employee, pageRequest);
+
+        PageableDTO.Response response = new PageableDTO.Response();
+        response.setTotalElements(result.getTotalElements());
+        response.setNumber(result.getNumber() + 1);
+        response.setSize(result.getSize());
+        response.setContent(
+                result.getContent()
+                        .stream()
+                        .map(CourseClassTimeMember::getMember)
+                        .map(memberInfoMapper)
+                        .toList()
+        );
+
+        return response;
     }
 }

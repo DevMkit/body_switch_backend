@@ -34,10 +34,7 @@ public class MemberService {
                 .and(MemberSpecifications.memberCourseTicketRemainingCount(memberSearchRequest.getRemainingCounts()))
                 .and(MemberSpecifications.memberCourseTicketExpireDateBetween(memberSearchRequest.getTicketExpireDateFrom(), memberSearchRequest.getTicketExpireDateTo()));
 
-        PageRequest pageRequest = PageRequest.of(
-                memberSearchRequest.getPage() - 1,
-                memberSearchRequest.getLimit()
-        );
+        PageRequest pageRequest = PageRequest.of(memberSearchRequest.getPage() - 1, memberSearchRequest.getLimit());
 
         Page<Member> result = memberRepository.findAll(specification, pageRequest);
         PageableDTO.Response response = new PageableDTO.Response();
