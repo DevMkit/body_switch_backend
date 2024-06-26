@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.co.softhubglobal.dto.employee.EmployeeDTO;
 import kr.co.softhubglobal.dto.member.MemberDTO;
+import kr.co.softhubglobal.exception.ApiError;
 import kr.co.softhubglobal.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,29 @@ public class MemberController {
     public ResponseEntity<?> getAllMembers(MemberDTO.MemberSearchRequest memberSearchRequest) {
         return new ResponseEntity<>(
                 memberService.getAllMembers(memberSearchRequest),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Retrieve a member info by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MemberDTO.MemberDetailInfo.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @GetMapping("{id}")
+    public ResponseEntity<?> getMemberDetailInfoById(
+            @PathVariable("id") String memberId
+    ) {
+        return new ResponseEntity<>(
+                memberService.getMemberDetailInfoById(memberId),
                 HttpStatus.OK
         );
     }

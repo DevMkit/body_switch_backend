@@ -1,16 +1,13 @@
 package kr.co.softhubglobal.dto.member;
 
-import ch.qos.logback.core.joran.action.AppenderRefAction;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.jdi.ClassType;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.PageableDTO;
-import kr.co.softhubglobal.entity.center.CenterManagerStatus;
 import kr.co.softhubglobal.entity.course.CourseClassType;
 import kr.co.softhubglobal.entity.member.Gender;
+import kr.co.softhubglobal.entity.member.MemberStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -114,7 +111,6 @@ public class MemberDTO {
         }
     }
 
-
     @Data
     @AllArgsConstructor
     public static class MemberInfo {
@@ -133,6 +129,28 @@ public class MemberDTO {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime lockerExpireDate;
         private boolean isSMSReceive;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberDetailInfo {
+
+        private String memberId;
+        private String profileImage;
+        private MemberType type;
+        private String name;
+        private String username;
+        private String phoneNumber;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate birthDate;
+        private int age;
+        private String email;
+        private Gender gender;
+        private boolean isSMSReceive;
+        private String address;
+        private String addressDetail;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDateTime registeredDate;
     }
 
     @Data

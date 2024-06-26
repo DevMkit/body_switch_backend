@@ -2,14 +2,20 @@ package kr.co.softhubglobal.service.member;
 
 import kr.co.softhubglobal.dto.PageableDTO;
 import kr.co.softhubglobal.dto.member.MemberDTO;
+import kr.co.softhubglobal.dto.member.MemberDetailInfoMapper;
 import kr.co.softhubglobal.dto.member.MemberInfoMapper;
 import kr.co.softhubglobal.entity.member.Member;
+import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException;
+import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +23,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberInfoMapper memberInfoMapper;
+    private final MemberDetailInfoMapper memberDetailInfoMapper;
+    private final MessageSource messageSource;
 
     public PageableDTO.Response getAllMembers(MemberDTO.MemberSearchRequest memberSearchRequest) {
 
@@ -49,5 +57,13 @@ public class MemberService {
         );
 
         return response;
+    }
+
+    public MemberDTO.MemberDetailInfo getMemberDetailInfoById(String memberId) {
+        return memberRepository.findById(memberId)
+                .map(memberDetailInfoMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{memberId}, Locale.ENGLISH)));
+
     }
 }
