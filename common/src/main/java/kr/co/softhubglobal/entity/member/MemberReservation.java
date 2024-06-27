@@ -7,7 +7,6 @@ import kr.co.softhubglobal.entity.course.CourseClassTime;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
