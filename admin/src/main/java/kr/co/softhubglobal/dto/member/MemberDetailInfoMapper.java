@@ -4,6 +4,7 @@ import kr.co.softhubglobal.entity.member.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberDetailInfoMapper implements Function<Member, MemberDTO.MemberDetailInfo> {
@@ -24,7 +25,12 @@ public class MemberDetailInfoMapper implements Function<Member, MemberDTO.Member
                 member.isSMSReceive(),
                 member.getAddress(),
                 member.getAddressDetail(),
-                member.getRegisteredDate()
+                member.getRegisteredDate(),
+                member.getCourseTickets()
+                        .stream()
+                        .map(memberCourseTicket -> memberCourseTicket.getCourseTicket().getBranch())
+                        .map(MemberDTO.MemberBranchInfo::new)
+                        .collect(Collectors.toSet())
         );
     }
 }

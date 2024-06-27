@@ -5,17 +5,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.PageableDTO;
+import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.course.CourseClassType;
+import kr.co.softhubglobal.entity.employee.Employee;
 import kr.co.softhubglobal.entity.member.Gender;
-import kr.co.softhubglobal.entity.member.MemberStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class MemberDTO {
 
@@ -151,6 +150,19 @@ public class MemberDTO {
         private String addressDetail;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime registeredDate;
+        private Set<MemberBranchInfo> memberBranchList;
+    }
+
+    @Data
+    public static class MemberBranchInfo {
+
+        private Long branchId;
+        private String branchName;
+
+        public MemberBranchInfo(final Branch branch) {
+            this.branchId = branch.getId();
+            this.branchName = branch.getBranchName();
+        }
     }
 
     @Data
@@ -161,10 +173,66 @@ public class MemberDTO {
         private String ticketName;
         private Integer usageCount;
         private Integer usagePeriod;
-        private String representativeTeacher;
+        private String representativeTrainer;
         private Integer remainingCount;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate expireDate;
         private Integer attendanceCount;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberDetailAdditionInfo {
+
+        private String memo;
+        private List<MemberTrainerInfo> trainers;
+        private Integer ticketTotalRemainingCount;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate ticketExpireDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate lockerExpireDate;
+        private Integer totalAttendanceCount;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDateTime firstPaymentDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate lastAttendanceDate;
+        private List<MemberReservationInfo> reservations;
+        private List<MemberActiveTicketInfo> activeTickets;
+    }
+
+    @Data
+    public static class MemberTrainerInfo {
+
+        private Long trainerId;
+        private String trainerName;
+
+        public MemberTrainerInfo(final Employee employee) {
+            this.trainerId = employee.getId();
+            this.trainerName = employee.getUser().getName();
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberReservationInfo {
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime classDateTime;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime reservedDateTime;
+        private String className;
+        private String representativeTrainer;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberActiveTicketInfo {
+
+        private CourseClassType courseClassType;
+        private String ticketName;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate ticketExpireDate;
+        private Integer remainingCount;
     }
 }

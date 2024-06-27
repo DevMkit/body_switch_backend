@@ -81,38 +81,44 @@ public class CourseTicketService {
         courseTicket.setSaleStatus(SaleStatus.APPROVAL_PENDING);
         courseTicket.setUsagePeriod(courseTicketCreateRequest.getUsagePeriod());
         courseTicket.setUsageCount(courseTicketCreateRequest.getUsageCount());
-        courseTicket.setCourseTrainers(
-                courseTicketCreateRequest.getTrainers()
-                        .stream()
-                        .map(trainerId -> {
-                            Optional<Employee> optionalTrainer = employeeRepository.findById(trainerId);
-                            return optionalTrainer.map(employee -> CourseTrainer.builder()
+        if(courseTicketCreateRequest.getTrainers() != null && !courseTicketCreateRequest.getTrainers().isEmpty()) {
+            courseTicket.setCourseTrainers(
+                    courseTicketCreateRequest.getTrainers()
+                            .stream()
+                            .map(trainerId -> {
+                                Optional<Employee> optionalTrainer = employeeRepository.findById(trainerId);
+                                return optionalTrainer.map(employee -> CourseTrainer.builder()
+                                        .courseTicket(courseTicket)
+                                        .employee(employee)
+                                        .build()).orElse(null);
+                            })
+                            .toList()
+            );
+        }
+        if(courseTicketCreateRequest.getImages() != null && !courseTicketCreateRequest.getImages().isEmpty()) {
+            courseTicket.setCourseTicketImages(
+                    courseTicketCreateRequest.getImages()
+                            .stream()
+                            .map(image -> CourseTicketImage.builder()
                                     .courseTicket(courseTicket)
-                                    .employee(employee)
-                                    .build()).orElse(null);
-                        })
-                        .toList()
-        );
-        courseTicket.setCourseTicketImages(
-                courseTicketCreateRequest.getImages()
-                        .stream()
-                        .map(image -> CourseTicketImage.builder()
-                                .courseTicket(courseTicket)
-                                .imageUrl(FileUploader.uploadFile(image))
-                                .build())
-                        .toList()
-        );
-        courseTicket.setCourseCurriculumList(
-                courseTicketCreateRequest.getCurriculums()
-                        .stream()
-                        .map(courseTicketCurriculumCreateInfo -> CourseCurriculum.builder()
-                                .courseTicket(courseTicket)
-                                .title(courseTicketCurriculumCreateInfo.getTitle())
-                                .summary(courseTicketCurriculumCreateInfo.getSummary())
-                                .imageUrl(FileUploader.uploadFile(courseTicketCurriculumCreateInfo.getImage()))
-                                .build())
-                        .toList()
-        );
+                                    .imageUrl(FileUploader.uploadFile(image))
+                                    .build())
+                            .toList()
+            );
+        }
+        if(courseTicketCreateRequest.getCurriculums() != null && !courseTicketCreateRequest.getCurriculums().isEmpty()) {
+            courseTicket.setCourseCurriculumList(
+                    courseTicketCreateRequest.getCurriculums()
+                            .stream()
+                            .map(courseTicketCurriculumCreateInfo -> CourseCurriculum.builder()
+                                    .courseTicket(courseTicket)
+                                    .title(courseTicketCurriculumCreateInfo.getTitle())
+                                    .summary(courseTicketCurriculumCreateInfo.getSummary())
+                                    .imageUrl(FileUploader.uploadFile(courseTicketCurriculumCreateInfo.getImage()))
+                                    .build())
+                            .toList()
+            );
+        }
         courseTicket.setClassDetail(courseTicketCreateRequest.getClassDetail());
 
         courseTicketRepository.save(courseTicket);

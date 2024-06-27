@@ -42,7 +42,7 @@ public class MemberController {
         );
     }
 
-    @Operation(summary = "Retrieve a member info by its ID")
+    @Operation(summary = "Retrieve a member detail info by its ID")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -61,6 +61,30 @@ public class MemberController {
     ) {
         return new ResponseEntity<>(
                 memberService.getMemberDetailInfoById(memberId),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Retrieve a member detail addition info by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MemberDTO.MemberDetailAdditionInfo.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @GetMapping("{id}/addition-info")
+    public ResponseEntity<?> getMemberDetailAdditionInfoById(
+            @PathVariable("id") String memberId,
+            Long branchId
+    ) {
+        return new ResponseEntity<>(
+                memberService.getMemberDetailAdditionInfoById(memberId, branchId),
                 HttpStatus.OK
         );
     }
