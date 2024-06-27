@@ -2,6 +2,7 @@ package kr.co.softhubglobal.dto.course;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.co.softhubglobal.entity.course.CourseClassType;
+import kr.co.softhubglobal.entity.employee.Responsibilities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -95,7 +96,7 @@ public class CourseTicketDTO {
         private Long id;
         private String name;
         private String image;
-        private List<String> responsibilities;
+        private List<Responsibilities> responsibilities;
         private String introduction;
     }
 
