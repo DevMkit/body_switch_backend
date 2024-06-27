@@ -145,6 +145,7 @@ public class NicepayService {
                                     .status(MemberCourseTicketStatus.ACTIVE)
                                     .build()
                     );
+                    memberOrder.setPaidAt(LocalDateTime.now());
                 } else {
                     System.out.println("Payment Failed");
                 }
