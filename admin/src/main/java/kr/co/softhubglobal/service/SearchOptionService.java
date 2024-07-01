@@ -1,6 +1,7 @@
 package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.searchOption.SearchOptionDTO;
+import kr.co.softhubglobal.entity.center.Center;
 import kr.co.softhubglobal.entity.center.CenterManager;
 import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.entity.common.Restrictions;
@@ -33,7 +34,14 @@ public class SearchOptionService {
         Restrictions restrictions = new Restrictions();
         restrictions.eq("centerType", CenterType.HEAD);
         if(user.getRole().equals(Role.MANAGER)) {
-            restrictions.eq("centerManager.user", user);
+            Center center = centerRepository.findByCenterManagerUser(user)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            messageSource.getMessage("center.not.found", null, Locale.ENGLISH )));
+            if(center.getCenterType().equals(CenterType.HEAD)) {
+                restrictions.eq("centerManager.user", user);
+            } else {
+                restrictions.eq("id", center.getHeadCenterId());
+            }
         }
         return centerRepository.findAll(restrictions.output())
                 .stream()
