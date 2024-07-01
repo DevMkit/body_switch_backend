@@ -99,20 +99,4 @@ public class CourseTicketDTO {
         private List<Responsibilities> responsibilities;
         private String introduction;
     }
-
-    @Data
-    @AllArgsConstructor
-    public static class ActiveCourseTicketInfo {
-
-        private Long courseTicketId;
-        private CourseClassType classType;
-        private String branchName;
-        private String ticketName;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate issueDate;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate expireDate;
-        private Integer usedCount;
-        private Integer usageCount;
-    }
 }

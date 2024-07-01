@@ -1,5 +1,6 @@
 package kr.co.softhubglobal.dto.course;
 
+import kr.co.softhubglobal.dto.member.MemberCourseTicketInfoMapper;
 import kr.co.softhubglobal.entity.course.CourseClassTime;
 import kr.co.softhubglobal.entity.member.MemberCourseTicket;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class CourseClassTimeDetailInfoMapper implements Function<CourseClassTime, CourseClassDTO.CourseClassTimeDetailInfo> {
 
-    private final ActiveCourseTicketInfoMapper activeCourseTicketInfoMapper;
+    private final MemberCourseTicketInfoMapper memberCourseTicketInfoMapper;
 
     public CourseClassDTO.CourseClassTimeDetailInfo apply(CourseClassTime courseClassTime, MemberCourseTicket memberCourseTicket) {
         return new CourseClassDTO.CourseClassTimeDetailInfo(
@@ -23,7 +24,7 @@ public class CourseClassTimeDetailInfoMapper implements Function<CourseClassTime
                 courseClassTime.getEndTime(),
                 courseClassTime.getCourseClass().getExerciseRoom().getName(),
                 courseClassTime.getCourseClass().getEmployee().getUser().getName(),
-                activeCourseTicketInfoMapper.apply(memberCourseTicket)
+                memberCourseTicketInfoMapper.apply(memberCourseTicket)
         );
     }
 

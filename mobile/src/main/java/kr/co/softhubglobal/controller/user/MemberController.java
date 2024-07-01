@@ -185,4 +185,51 @@ public class MemberController {
                 HttpStatus.OK
         );
     }
+
+    @Operation(summary = "Retrieve member certificate information")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MemberDTO.MemberCertificateInfo.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @GetMapping("certificate")
+    public ResponseEntity<?> getMemberCertificate(
+            @AuthenticationPrincipal UserDetails userDetails,
+            Long branchId
+    ) {
+        return new ResponseEntity<>(
+                memberService.getMemberCertificate(((User) userDetails).getId(), branchId),
+                HttpStatus.OK
+        );
+    }
+
+    @Operation(summary = "Retrieve member course tickets information")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = MemberDTO.MemberTicketInfo.class)) }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT FOUND",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)) }
+            )
+    })
+    @GetMapping("tickets")
+    public ResponseEntity<?> getMemberCourseTickets(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return new ResponseEntity<>(
+                memberService.getMemberCourseTickets(((User) userDetails).getId()),
+                HttpStatus.OK
+        );
+    }
 }

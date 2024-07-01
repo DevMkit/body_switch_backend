@@ -2,6 +2,7 @@ package kr.co.softhubglobal.dto.course;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
+import kr.co.softhubglobal.dto.member.MemberDTO;
 import kr.co.softhubglobal.entity.course.CourseClassType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -86,6 +87,6 @@ public class CourseClassDTO {
         private LocalTime endTime;
         private String exerciseRoom;
         private String trainerName;
-        private CourseTicketDTO.ActiveCourseTicketInfo activeCourseTicketInfo;
+        private MemberDTO.MemberCourseTicketInfo activeCourseTicketInfo;
     }
 }

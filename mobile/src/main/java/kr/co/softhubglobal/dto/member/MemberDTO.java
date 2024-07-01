@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import kr.co.softhubglobal.dto.course.CourseTicketDTO;
 import kr.co.softhubglobal.entity.course.CourseClassType;
 import kr.co.softhubglobal.entity.member.Gender;
+import kr.co.softhubglobal.entity.member.MemberCourseTicketStatus;
 import kr.co.softhubglobal.entity.member.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class MemberDTO {
 
@@ -149,6 +151,23 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
+    public static class MemberCourseTicketInfo {
+
+        private Long courseTicketId;
+        private CourseClassType classType;
+        private String branchName;
+        private String ticketName;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate issueDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate expireDate;
+        private Integer usedCount;
+        private Integer usageCount;
+        private MemberCourseTicketStatus status;
+    }
+
+    @Data
+    @AllArgsConstructor
     public static class MemberReservationDetailInfo {
 
         private Long reservationId;
@@ -163,6 +182,24 @@ public class MemberDTO {
         private LocalTime endTime;
         private String exerciseRoom;
         private String trainerName;
-        private CourseTicketDTO.ActiveCourseTicketInfo activeCourseTicketInfo;
+        private MemberCourseTicketInfo activeCourseTicketInfo;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberCertificateInfo {
+
+        private String memberId;
+        private String name;
+        private List<MemberCourseTicketInfo> activeTickets;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class MemberTicketInfo {
+
+        private List<String> vodTickets;
+        private List<MemberCourseTicketInfo> activeTickets;
+        private List<MemberCourseTicketInfo> expiredTickets;
     }
 }

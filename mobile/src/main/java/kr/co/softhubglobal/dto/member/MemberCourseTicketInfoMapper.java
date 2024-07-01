@@ -1,4 +1,4 @@
-package kr.co.softhubglobal.dto.course;
+package kr.co.softhubglobal.dto.member;
 
 import kr.co.softhubglobal.entity.member.MemberCourseTicket;
 import org.springframework.stereotype.Service;
@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.function.Function;
 
 @Service
-public class ActiveCourseTicketInfoMapper implements Function<MemberCourseTicket, CourseTicketDTO.ActiveCourseTicketInfo> {
+public class MemberCourseTicketInfoMapper implements Function<MemberCourseTicket, MemberDTO.MemberCourseTicketInfo> {
 
     @Override
-    public CourseTicketDTO.ActiveCourseTicketInfo apply(MemberCourseTicket memberCourseTicket) {
-        return new CourseTicketDTO.ActiveCourseTicketInfo(
+    public MemberDTO.MemberCourseTicketInfo apply(MemberCourseTicket memberCourseTicket) {
+        return new MemberDTO.MemberCourseTicketInfo(
                 memberCourseTicket.getCourseTicket().getId(),
                 memberCourseTicket.getCourseTicket().getClassType(),
                 memberCourseTicket.getCourseTicket().getBranch().getBranchName(),
@@ -18,7 +18,8 @@ public class ActiveCourseTicketInfoMapper implements Function<MemberCourseTicket
                 memberCourseTicket.getStartDate(),
                 memberCourseTicket.getStartDate().plusMonths(memberCourseTicket.getCourseTicket().usagePeriod),
                 memberCourseTicket.getUsedCount(),
-                memberCourseTicket.getCourseTicket().usageCount
+                memberCourseTicket.getCourseTicket().usageCount,
+                memberCourseTicket.getStatus()
         );
     }
 }

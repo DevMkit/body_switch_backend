@@ -1,5 +1,6 @@
 package kr.co.softhubglobal.service;
 
+import kr.co.softhubglobal.dto.member.MemberCourseTicketInfoMapper;
 import kr.co.softhubglobal.dto.member.*;
 import kr.co.softhubglobal.entity.common.Restrictions;
 import kr.co.softhubglobal.entity.member.*;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +37,7 @@ public class MemberService {
     private final MemberUsageInfoMapper memberUsageInfoMapper;
     private final MemberReservationInfoMapper memberReservationInfoMapper;
     private final MemberReservationDetailInfoMapper memberReservationDetailInfoMapper;
+    private final MemberCourseTicketInfoMapper memberCourseTicketInfoMapper;
     private final ObjectValidator<MemberDTO.MemberCreateRequest> memberCreateRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberUpdateRequest> memberUpdateRequestObjectValidator;
     private final ObjectValidator<MemberDTO.MemberUsernameCheckRequest> memberUsernameCheckRequestObjectValidator;
@@ -164,7 +167,7 @@ public class MemberService {
             member.setProfileImage(FileUploader.uploadFile(memberUpdateRequest.getProfileImage()));
         }
         if(memberUpdateRequest.getPassword() != null) {
-            member.setProfileImage(passwordEncoder.encode(memberUpdateRequest.getPassword()));
+            member.getUser().setPassword(passwordEncoder.encode(memberUpdateRequest.getPassword()));
         }
         if(memberUpdateRequest.getPhoneNumber() != null) {
             member.getUser().setPhoneNumber(memberUpdateRequest.getPhoneNumber());
@@ -186,5 +189,45 @@ public class MemberService {
         }
 
         memberRepository.save(member);
+    }
+
+    public MemberDTO.MemberCertificateInfo getMemberCertificate(Long userId, Long branchId) {
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
+
+        return new MemberDTO.MemberCertificateInfo(
+                member.getId(),
+                member.getUser().getName(),
+                member.getCourseTickets()
+                        .stream()
+                        .filter(memberCourseTicket -> memberCourseTicket.getStatus().equals(MemberCourseTicketStatus.ACTIVE)
+                                && memberCourseTicket.getCourseTicket().getBranch().getId().equals(branchId)
+                        )
+                        .map(memberCourseTicketInfoMapper)
+                        .toList()
+        );
+    }
+
+    public MemberDTO.MemberTicketInfo getMemberCourseTickets(Long userId) {
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        messageSource.getMessage("member.user.id.not.found", new Object[]{userId}, Locale.ENGLISH)));
+
+        return new MemberDTO.MemberTicketInfo(
+                new ArrayList<>(),
+                member.getCourseTickets()
+                        .stream()
+                        .filter(memberCourseTicket -> memberCourseTicket.getStatus().equals(MemberCourseTicketStatus.ACTIVE))
+                        .map(memberCourseTicketInfoMapper)
+                        .toList(),
+                member.getCourseTickets()
+                        .stream()
+                        .filter(memberCourseTicket -> memberCourseTicket.getStatus().equals(MemberCourseTicketStatus.INACTIVE))
+                        .map(memberCourseTicketInfoMapper)
+                        .toList()
+        );
     }
 }
