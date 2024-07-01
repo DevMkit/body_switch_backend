@@ -36,6 +36,7 @@ public class CourseTicketDTO {
     public static class CourseTicketDetailInfo {
 
         private Long id;
+        private boolean isSaved;
         private CourseClassType classType;
         private String branchName;
         private String ticketName;

@@ -10,6 +10,9 @@ import kr.co.softhubglobal.exception.customExceptions.DuplicateResourceException
 import kr.co.softhubglobal.exception.customExceptions.RequestNotAcceptableException;
 import kr.co.softhubglobal.exception.customExceptions.ResourceNotFoundException;
 import kr.co.softhubglobal.repository.*;
+import kr.co.softhubglobal.repository.member.MemberCourseTicketRepository;
+import kr.co.softhubglobal.repository.member.MemberRepository;
+import kr.co.softhubglobal.repository.member.MemberReservationRepository;
 import kr.co.softhubglobal.utils.FileUploader;
 import kr.co.softhubglobal.utils.RandomCodeGenerator;
 import kr.co.softhubglobal.validator.ObjectValidator;

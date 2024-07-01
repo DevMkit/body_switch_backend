@@ -1,4 +1,4 @@
-package kr.co.softhubglobal.repository;
+package kr.co.softhubglobal.repository.member;
 
 import kr.co.softhubglobal.entity.member.MemberReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
