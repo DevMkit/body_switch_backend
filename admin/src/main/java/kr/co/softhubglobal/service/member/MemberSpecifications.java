@@ -132,12 +132,13 @@ public class MemberSpecifications {
         };
     }
 
-    public static Specification<Member> memberIsSmsReceive(Boolean isSMSReceive) {
+    public static Specification<Member> memberIsSmsReceiveIn(List<Boolean> smsReceiveList) {
         return (root, query, cb) -> {
-            if (isSMSReceive == null) {
+            if (smsReceiveList == null || smsReceiveList.isEmpty()) {
                 return cb.conjunction();
             }
-            return cb.equal(root.get("isSMSReceive"), isSMSReceive);
+            return root.get("isSMSReceive").in(smsReceiveList);
+//            return cb.equal(root.get("isSMSReceive"), isSMSReceive);
         };
     }
 

@@ -40,7 +40,7 @@ public class MemberService {
                 .and(MemberSpecifications.memberCourseTicketTrainerIdEqual(memberSearchRequest.getCourseTrainerId()))
                 .and(MemberSpecifications.memberGenderIn(memberSearchRequest.getGenders()))
                 .and(MemberSpecifications.memberAgeInRanges(memberSearchRequest.getAgeRanges()))
-                .and(MemberSpecifications.memberIsSmsReceive(memberSearchRequest.getIsSMSReceive()))
+                .and(MemberSpecifications.memberIsSmsReceiveIn(memberSearchRequest.getSmsRecieveList()))
                 .and(MemberSpecifications.memberCourseTicketRemainingCount(memberSearchRequest.getRemainingCounts()))
                 .and(MemberSpecifications.memberCourseTicketExpireDateBetween(memberSearchRequest.getTicketExpireDateFrom(), memberSearchRequest.getTicketExpireDateTo()));
 

@@ -67,7 +67,7 @@ public class MemberDTO {
         private Long courseTrainerId;
         private List<Gender> genders;
         private List<AgeRange> ageRanges;
-        private Boolean isSMSReceive;
+        private List<Boolean> smsRecieveList;
         private List<RemainingCount> remainingCounts;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate ticketExpireDateFrom;
