@@ -8,48 +8,48 @@ import lombok.Data;
 public class SearchOptionDTO {
 
     @Data
-    public static class HeadBranchInfo {
+    public static class HeadBranchSelectionInfo {
 
         private Long headBranchId;
         private String headBranchName;
 
-        public HeadBranchInfo(final Center center) {
+        public HeadBranchSelectionInfo(final Center center) {
             this.headBranchId = center.getId();
             this.headBranchName = center.getBranch().getBranchName();
         }
     }
 
     @Data
-    public static class BranchInfo {
+    public static class BranchSelectionInfo {
 
         private Long branchId;
         private String branchName;
 
-        public BranchInfo(final Center center) {
+        public BranchSelectionInfo(final Center center) {
             this.branchId = center.getBranch().getId();
             this.branchName = center.getBranch().getBranchName();
         }
     }
 
     @Data
-    public static class CourseTicketInfo {
+    public static class CourseTicketSelectionInfo {
 
         private Long courseTicketId;
         private String courseTicketName;
 
-        public CourseTicketInfo(final CourseTicket courseTicket) {
+        public CourseTicketSelectionInfo(final CourseTicket courseTicket) {
             this.courseTicketId = courseTicket.getId();
             this.courseTicketName = courseTicket.getTicketName();
         }
     }
 
     @Data
-    public static class CourseTicketTrainerInfo {
+    public static class CourseTicketTrainerSelectionInfo {
 
         private Long trainerId;
         private String trainerName;
 
-        public CourseTicketTrainerInfo(final Employee employee) {
+        public CourseTicketTrainerSelectionInfo(final Employee employee) {
             this.trainerId = employee.getId();
             this.trainerName = employee.getUser().getName();
         }

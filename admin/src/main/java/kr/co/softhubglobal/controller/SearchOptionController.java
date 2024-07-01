@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import kr.co.softhubglobal.dto.searchOption.SearchOptionDTO;
 import kr.co.softhubglobal.entity.user.User;
 import kr.co.softhubglobal.service.SearchOptionService;
@@ -18,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static kr.co.softhubglobal.config.OpenApiConfig.BEARER_KEY_SECURITY_SCHEME;
 
@@ -37,7 +36,7 @@ public class SearchOptionController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.HeadBranchInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.HeadBranchSelectionInfo.class)) }
             )
     })
     @GetMapping("head-branches")
@@ -53,7 +52,7 @@ public class SearchOptionController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.BranchInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.BranchSelectionInfo.class)) }
             )
     })
     @GetMapping("branches")
@@ -72,7 +71,7 @@ public class SearchOptionController {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketSelectionInfo.class)) }
             )
     })
     @GetMapping("course-tickets")
@@ -85,12 +84,12 @@ public class SearchOptionController {
         );
     }
 
-    @Operation(summary = "Retrieve course ticket selection options")
+    @Operation(summary = "Retrieve course ticket trainer selection options")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
                     description = "OK",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketTrainerInfo.class)) }
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SearchOptionDTO.CourseTicketTrainerSelectionInfo.class)) }
             )
     })
     @GetMapping("course-trainers")

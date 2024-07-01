@@ -1,7 +1,6 @@
 package kr.co.softhubglobal.service;
 
 import kr.co.softhubglobal.dto.searchOption.SearchOptionDTO;
-import kr.co.softhubglobal.entity.branch.Branch;
 import kr.co.softhubglobal.entity.center.CenterManager;
 import kr.co.softhubglobal.entity.center.CenterType;
 import kr.co.softhubglobal.entity.common.Restrictions;
@@ -29,7 +28,7 @@ public class SearchOptionService {
     private final CourseTicketRepository courseTicketRepository;
     private final MessageSource messageSource;
 
-    public List<SearchOptionDTO.HeadBranchInfo> getHeadBranchSelectionOptions(User user) {
+    public List<SearchOptionDTO.HeadBranchSelectionInfo> getHeadBranchSelectionOptions(User user) {
 
         Restrictions restrictions = new Restrictions();
         restrictions.eq("centerType", CenterType.HEAD);
@@ -39,11 +38,11 @@ public class SearchOptionService {
         return centerRepository.findAll(restrictions.output())
                 .stream()
                 .filter(center -> center.getBranch() != null)
-                .map(SearchOptionDTO.HeadBranchInfo::new)
+                .map(SearchOptionDTO.HeadBranchSelectionInfo::new)
                 .toList();
     }
 
-    public List<SearchOptionDTO.BranchInfo> getBranchSelectionOptions(User user, Long headBranchId) {
+    public List<SearchOptionDTO.BranchSelectionInfo> getBranchSelectionOptions(User user, Long headBranchId) {
         Restrictions restrictions = new Restrictions(Restrictions.Conn.OR);
         restrictions.eq("id", headBranchId);
         Restrictions restrictions1 = new Restrictions();
@@ -61,22 +60,22 @@ public class SearchOptionService {
         return centerRepository.findAll(restrictions.output())
                 .stream()
                 .filter(center -> center.getBranch() != null)
-                .map(SearchOptionDTO.BranchInfo::new)
+                .map(SearchOptionDTO.BranchSelectionInfo::new)
                 .toList();
     }
 
-    public List<SearchOptionDTO.CourseTicketInfo> getCourseTicketSelectionOptions(Long branchId) {
+    public List<SearchOptionDTO.CourseTicketSelectionInfo> getCourseTicketSelectionOptions(Long branchId) {
         Restrictions restrictions = new Restrictions();
         if(branchId != null) {
             restrictions.eq("branch.id", branchId);
         }
         return courseTicketRepository.findAll(restrictions.output())
                 .stream()
-                .map(SearchOptionDTO.CourseTicketInfo::new)
+                .map(SearchOptionDTO.CourseTicketSelectionInfo::new)
                 .toList();
     }
 
-    public List<SearchOptionDTO.CourseTicketTrainerInfo> getCourseTicketTrainerSelectionOptions(Long courseTicketId) {
+    public List<SearchOptionDTO.CourseTicketTrainerSelectionInfo> getCourseTicketTrainerSelectionOptions(Long courseTicketId) {
 
         CourseTicket courseTicket = courseTicketRepository.findById(courseTicketId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -85,7 +84,7 @@ public class SearchOptionService {
         return courseTicket.getCourseTrainers()
                 .stream()
                 .map(CourseTrainer::getEmployee)
-                .map(SearchOptionDTO.CourseTicketTrainerInfo::new)
+                .map(SearchOptionDTO.CourseTicketTrainerSelectionInfo::new)
                 .toList();
     }
 }

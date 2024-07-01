@@ -55,7 +55,7 @@ public class CenterService {
             if(center.getCenterType().equals(CenterType.HEAD)) {
                 restrictions2.eq("headCenterId", center.getId());
             }
-            if(centerSearchRequest.getBranchName() != null) {
+            if(centerSearchRequest.getBranchName() != null && !centerSearchRequest.getBranchName().isEmpty()) {
                 restrictions1.like("branch.branchName", "%" + centerSearchRequest.getBranchName() + "%");
                 restrictions2.like("branch.branchName", "%" + centerSearchRequest.getBranchName() + "%");
             }
